@@ -3,6 +3,7 @@ SUBDIRS = \
 	autotools-templates \
 	build-tools \
 	clang \
+	color-picker \
 	command-bar \
 	contributing \
 	c-pack \
