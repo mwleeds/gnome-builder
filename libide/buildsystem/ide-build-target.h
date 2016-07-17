@@ -1,4 +1,4 @@
-/* ide-omni-bar.h
+/* ide-build-target.h
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,21 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_OMNI_BAR_H
-#define IDE_OMNI_BAR_H
+#ifndef IDE_BUILD_TARGET_H
+#define IDE_BUILD_TARGET_H
 
-#include <gtk/gtk.h>
+#include <glib-object.h>
 
-#include "ide-types.h"
+#include "ide-object.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_OMNI_BAR (ide_omni_bar_get_type())
+#define IDE_TYPE_BUILD_TARGET (ide_build_target_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, GtkBox)
+G_DECLARE_INTERFACE (IdeBuildTarget, ide_build_target, IDE, BUILD_TARGET, IdeObject)
 
-GtkWidget *ide_omni_bar_new (void);
+struct _IdeBuildTargetInterface
+{
+  GTypeInterface parent_iface;
+
+  GFile *(*get_install_directory) (IdeBuildTarget *self);
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
+};
+
+GFile *ide_build_target_get_install_directory (IdeBuildTarget *self);
 
 G_END_DECLS
 
-#endif /* IDE_OMNI_BAR_H */
+#endif /* IDE_BUILD_TARGET_H */

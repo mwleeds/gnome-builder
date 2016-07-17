@@ -1,4 +1,4 @@
-/* ide-omni-bar.h
+/* ide-build-target.c
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,21 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_OMNI_BAR_H
-#define IDE_OMNI_BAR_H
+#define G_LOG_DOMAIN "ide-build-target"
 
-#include <gtk/gtk.h>
+#include "ide-build-target.h"
 
-#include "ide-types.h"
+G_DEFINE_INTERFACE (IdeBuildTarget, ide_build_target, IDE_TYPE_OBJECT)
 
-G_BEGIN_DECLS
+static void
+ide_build_target_default_init (IdeBuildTargetInterface *iface)
+{
+}
 
-#define IDE_TYPE_OMNI_BAR (ide_omni_bar_get_type())
+/**
+ * ide_build_target_get_install_directory:
+ *
+ * Returns: (nullable) (transfer full): A #GFile or %NULL.
+ */
+GFile *
+ide_build_target_get_install_directory (IdeBuildTarget *self)
+{
+  g_return_val_if_fail (IDE_IS_BUILD_TARGET (self), NULL);
 
-G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, GtkBox)
+  if (IDE_BUILD_TARGET_GET_IFACE (self)->get_install_directory)
+    return IDE_BUILD_TARGET_GET_IFACE (self)->get_install_directory (self);
 
-GtkWidget *ide_omni_bar_new (void);
-
-G_END_DECLS
-
-#endif /* IDE_OMNI_BAR_H */
+  return NULL;
+}

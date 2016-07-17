@@ -1,4 +1,4 @@
-/* ide-omni-bar.h
+/* ide-autotools-runner-addin.h
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,21 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_OMNI_BAR_H
-#define IDE_OMNI_BAR_H
+#ifndef IDE_AUTOTOOLS_RUNNER_ADDIN_H
+#define IDE_AUTOTOOLS_RUNNER_ADDIN_H
 
-#include <gtk/gtk.h>
-
-#include "ide-types.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_OMNI_BAR (ide_omni_bar_get_type())
+#define IDE_TYPE_AUTOTOOLS_RUNNER_ADDIN (ide_autotools_runner_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, GtkBox)
-
-GtkWidget *ide_omni_bar_new (void);
+G_DECLARE_FINAL_TYPE (IdeAutotoolsRunnerAddin, ide_autotools_runner_addin, IDE, AUTOTOOLS_RUNNER_ADDIN, GObject)
 
 G_END_DECLS
 
-#endif /* IDE_OMNI_BAR_H */
+#endif /* IDE_AUTOTOOLS_RUNNER_ADDIN_H */

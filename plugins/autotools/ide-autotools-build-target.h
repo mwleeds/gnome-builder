@@ -1,4 +1,4 @@
-/* ide-omni-bar.h
+/* ide-autotools-build-target.h
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,21 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_OMNI_BAR_H
-#define IDE_OMNI_BAR_H
+#ifndef IDE_AUTOTOOLS_BUILD_TARGET_H
+#define IDE_AUTOTOOLS_BUILD_TARGET_H
 
-#include <gtk/gtk.h>
-
-#include "ide-types.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_OMNI_BAR (ide_omni_bar_get_type())
+#define IDE_TYPE_AUTOTOOLS_BUILD_TARGET (ide_autotools_build_target_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, GtkBox)
-
-GtkWidget *ide_omni_bar_new (void);
+G_DECLARE_FINAL_TYPE (IdeAutotoolsBuildTarget, ide_autotools_build_target, IDE, AUTOTOOLS_BUILD_TARGET, IdeObject)
 
 G_END_DECLS
 
-#endif /* IDE_OMNI_BAR_H */
+#endif /* IDE_AUTOTOOLS_BUILD_TARGET_H */

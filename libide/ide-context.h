@@ -33,11 +33,13 @@ G_DECLARE_FINAL_TYPE (IdeContext, ide_context, IDE, CONTEXT, GObject)
 IdeBackForwardList       *ide_context_get_back_forward_list     (IdeContext           *self);
 GFile                    *ide_context_get_project_file          (IdeContext           *self);
 IdeBufferManager         *ide_context_get_buffer_manager        (IdeContext           *self);
+IdeBuildManager          *ide_context_get_build_manager         (IdeContext           *self);
 IdeBuildSystem           *ide_context_get_build_system          (IdeContext           *self);
 IdeConfigurationManager  *ide_context_get_configuration_manager (IdeContext           *self);
 IdeDeviceManager         *ide_context_get_device_manager        (IdeContext           *self);
 IdeProject               *ide_context_get_project               (IdeContext           *self);
 GtkRecentManager         *ide_context_get_recent_manager        (IdeContext           *self);
+IdeRunManager            *ide_context_get_run_manager           (IdeContext           *self);
 IdeRuntimeManager        *ide_context_get_runtime_manager       (IdeContext           *self);
 IdeScriptManager         *ide_context_get_script_manager        (IdeContext           *self);
 IdeSearchEngine          *ide_context_get_search_engine         (IdeContext           *self);

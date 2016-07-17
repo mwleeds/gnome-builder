@@ -1,4 +1,4 @@
-/* ide-omni-bar.h
+/* gbp-run-plugin.c
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,21 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_OMNI_BAR_H
-#define IDE_OMNI_BAR_H
+#include <ide.h>
+#include <libpeas/peas.h>
 
-#include <gtk/gtk.h>
+#include "gbp-run-workbench-addin.h"
 
-#include "ide-types.h"
-
-G_BEGIN_DECLS
-
-#define IDE_TYPE_OMNI_BAR (ide_omni_bar_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, GtkBox)
-
-GtkWidget *ide_omni_bar_new (void);
-
-G_END_DECLS
-
-#endif /* IDE_OMNI_BAR_H */
+void
+peas_register_types (PeasObjectModule *module)
+{
+  peas_object_module_register_extension_type (module, IDE_TYPE_WORKBENCH_ADDIN, GBP_TYPE_RUN_WORKBENCH_ADDIN);
+}

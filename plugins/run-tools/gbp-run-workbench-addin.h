@@ -1,4 +1,4 @@
-/* ide-omni-bar.h
+/* gbp-run-workbench-addin.h
  *
  * Copyright (C) 2016 Christian Hergert <chergert@redhat.com>
  *
@@ -16,21 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IDE_OMNI_BAR_H
-#define IDE_OMNI_BAR_H
+#ifndef GBP_RUN_WORKBENCH_ADDIN_H
+#define GBP_RUN_WORKBENCH_ADDIN_H
 
-#include <gtk/gtk.h>
-
-#include "ide-types.h"
+#include <ide.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_OMNI_BAR (ide_omni_bar_get_type())
+#define GBP_TYPE_RUN_WORKBENCH_ADDIN (gbp_run_workbench_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, GtkBox)
-
-GtkWidget *ide_omni_bar_new (void);
+G_DECLARE_FINAL_TYPE (GbpRunWorkbenchAddin, gbp_run_workbench_addin, GBP, RUN_WORKBENCH_ADDIN, GObject)
 
 G_END_DECLS
 
-#endif /* IDE_OMNI_BAR_H */
+#endif /* GBP_RUN_WORKBENCH_ADDIN_H */
