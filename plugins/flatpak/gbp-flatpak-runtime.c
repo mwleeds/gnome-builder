@@ -142,7 +142,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
   }
 #endif
 
-  subprocess = g_subprocess_launcher_spawnv (launcher, args, &error);
+  subprocess = g_subprocess_launcher_spawnv (launcher, (const gchar * const *) args, &error);
 
   g_task_return_boolean (task, TRUE);
 }
