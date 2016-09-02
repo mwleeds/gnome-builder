@@ -42,8 +42,11 @@ struct _IdeConfiguration
   gchar          *id;
   gchar          *prefix;
   gchar          *runtime_id;
+  gchar          *flatpak_repo_name;
 
   IdeEnvironment *environment;
+  GFile          *flatpak_manifest;
+  GFile          *flatpak_repo_dir;
 
   IdeBuildCommandQueue *prebuild;
   IdeBuildCommandQueue *postbuild;
@@ -71,6 +74,9 @@ enum {
   PROP_PREFIX,
   PROP_RUNTIME,
   PROP_RUNTIME_ID,
+  PROP_FLATPAK_MANIFEST,
+  PROP_FLATPAK_REPO_DIR,
+  PROP_FLATPAK_REPO_NAME,
   N_PROPS
 };
 
@@ -196,6 +202,8 @@ ide_configuration_finalize (GObject *object)
   g_clear_object (&self->environment);
   g_clear_object (&self->prebuild);
   g_clear_object (&self->postbuild);
+  g_clear_object (&self->flatpak_manifest);
+  g_clear_object (&self->flatpak_repo_dir);
 
   g_clear_pointer (&self->config_opts, g_free);
   g_clear_pointer (&self->device_id, g_free);
@@ -203,6 +211,7 @@ ide_configuration_finalize (GObject *object)
   g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->prefix, g_free);
   g_clear_pointer (&self->runtime_id, g_free);
+  g_clear_pointer (&self->flatpak_repo_name, g_free);
 
   G_OBJECT_CLASS (ide_configuration_parent_class)->finalize (object);
 }
@@ -259,6 +268,18 @@ ide_configuration_get_property (GObject    *object,
 
     case PROP_RUNTIME_ID:
       g_value_set_string (value, ide_configuration_get_runtime_id (self));
+      break;
+
+    case PROP_FLATPAK_MANIFEST:
+      g_value_set_object (value, ide_configuration_get_flatpak_manifest (self));
+      break;
+
+    case PROP_FLATPAK_REPO_DIR:
+      g_value_set_object (value, ide_configuration_get_flatpak_repo_dir (self));
+      break;
+
+    case PROP_FLATPAK_REPO_NAME:
+      g_value_set_string (value, ide_configuration_get_flatpak_repo_name (self));
       break;
 
     default:
@@ -318,6 +339,18 @@ ide_configuration_set_property (GObject      *object,
 
     case PROP_RUNTIME_ID:
       ide_configuration_set_runtime_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_FLATPAK_MANIFEST:
+      ide_configuration_set_flatpak_manifest (self, g_value_get_object (value));
+      break;
+
+    case PROP_FLATPAK_REPO_DIR:
+      ide_configuration_set_flatpak_repo_dir (self, g_value_get_object (value));
+      break;
+
+    case PROP_FLATPAK_REPO_NAME:
+      ide_configuration_set_flatpak_repo_name (self, g_value_get_string (value));
       break;
 
     default:
@@ -419,6 +452,27 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
                          "Runtime Id",
                          "The identifier of the runtime",
                          "host",
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_FLATPAK_MANIFEST] =
+    g_param_spec_object ("flatpak-manifest",
+                         "Flatpak manifest",
+                         "Flatpak manifest JSON file",
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_FLATPAK_REPO_DIR] =
+    g_param_spec_object ("flatpak-repo-dir",
+                         "Flatpak repo directory",
+                         "A file representing the location of the flatpak repository used to export builds",
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_FLATPAK_REPO_NAME] =
+    g_param_spec_string ("flatpak-repo-name",
+                         "Flatpak repo name",
+                         "The name of the flatpak repository used to export builds",
+                         "gnome-builder-builds",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -534,6 +588,92 @@ ide_configuration_set_device (IdeConfiguration *self,
     device_id = ide_device_get_id (device);
 
   ide_configuration_set_device_id (self, device_id);
+}
+
+/**
+ * ide_configuration_get_flatpak_manifest:
+ * @self: An #IdeConfiguration
+ *
+ * Gets the flatpak manifest file for the configuration.
+ *
+ * Returns: (transfer none) (nullable): A #GFile.
+ */
+GFile *
+ide_configuration_get_flatpak_manifest (IdeConfiguration *self)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  return self->flatpak_manifest;
+}
+
+void
+ide_configuration_set_flatpak_manifest (IdeConfiguration *self,
+                                        GFile            *flatpak_manifest)
+{
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (!flatpak_manifest || G_IS_FILE (flatpak_manifest));
+
+  if (self->flatpak_manifest)
+    g_object_unref (self->flatpak_manifest);
+
+  self->flatpak_manifest = g_object_ref (flatpak_manifest);
+}
+
+/**
+ * ide_configuration_get_flatpak_repo_dir:
+ * @self: An #IdeConfiguration
+ *
+ * Gets the flatpak repository directory for the configuration.
+ *
+ * Returns: (transfer none) (nullable): A #GFile.
+ */
+GFile *
+ide_configuration_get_flatpak_repo_dir (IdeConfiguration *self)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  return self->flatpak_repo_dir;
+}
+
+void
+ide_configuration_set_flatpak_repo_dir (IdeConfiguration *self,
+                                        GFile            *flatpak_repo_dir)
+{
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (!flatpak_repo_dir || G_IS_FILE (flatpak_repo_dir));
+
+  if (self->flatpak_repo_dir)
+    g_object_unref (self->flatpak_repo_dir);
+
+  self->flatpak_repo_dir = g_object_ref (flatpak_repo_dir);
+}
+
+/**
+ * ide_configuration_get_flatpak_repo_name:
+ * @self: An #IdeConfiguration
+ *
+ * Gets the flatpak repository name for the configuration.
+ *
+ * Returns: (transfer none) (nullable): A string.
+ */
+const gchar *
+ide_configuration_get_flatpak_repo_name (IdeConfiguration *self)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  return self->flatpak_repo_name;
+}
+
+void
+ide_configuration_set_flatpak_repo_name (IdeConfiguration *self,
+                                         const gchar      *flatpak_repo_name)
+{
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+  g_return_if_fail (flatpak_repo_name != NULL);
+
+  g_free (self->flatpak_repo_name);
+
+  self->flatpak_repo_name = g_strdup (flatpak_repo_name);
 }
 
 const gchar *
