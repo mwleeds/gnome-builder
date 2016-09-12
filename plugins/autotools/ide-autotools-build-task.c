@@ -567,6 +567,58 @@ worker_state_free (void *data)
 }
 
 static void
+ide_autotools_build_task_runtime_postbuild_cb (GObject      *object,
+                                               GAsyncResult *result,
+                                               gpointer      user_data)
+{
+  IdeRuntime *runtime = (IdeRuntime *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUNTIME (runtime));
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_runtime_postbuild_finish (runtime, result, &error))
+    {
+      g_task_return_error (task, error);
+      IDE_EXIT;
+    }
+
+  g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_autotools_build_task_runtime_postinstall_cb (GObject      *object,
+                                                 GAsyncResult *result,
+                                                 gpointer      user_data)
+{
+  IdeRuntime *runtime = (IdeRuntime *)object;
+  g_autoptr(GTask) task = user_data;
+  GError *error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUNTIME (runtime));
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_runtime_postinstall_finish (runtime, result, &error))
+    {
+      g_task_return_error (task, error);
+      IDE_EXIT;
+    }
+
+  g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
 ide_autotools_build_task_execute_worker (GTask        *task,
                                          gpointer      source_object,
                                          gpointer      task_data,
@@ -599,8 +651,20 @@ ide_autotools_build_task_execute_worker (GTask        *task,
       g_task_return_error (task, error);
       return;
     }
-
-  g_task_return_boolean (task, TRUE);
+  else
+    {
+        /* Execute the runtime's postbuild or postinstall hook */
+        if (self->install)
+          ide_runtime_postinstall_async (state->runtime,
+                                         cancellable,
+                                         ide_autotools_build_task_runtime_postinstall_cb,
+                                         g_steal_pointer (&task));
+        else
+          ide_runtime_postbuild_async (state->runtime,
+                                       cancellable,
+                                       ide_autotools_build_task_runtime_postbuild_cb,
+                                       g_steal_pointer (&task));
+    }
 }
 
 static void

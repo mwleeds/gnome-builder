@@ -239,6 +239,7 @@ ide_autotools_builder_install_async (IdeBuilder           *builder,
                                "directory", directory,
                                "mode", _("Building…"),
                                "running", TRUE,
+                               "install", TRUE,
                                NULL);
 
   ide_autotools_build_task_add_target (build_result, "install");
