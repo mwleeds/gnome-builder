@@ -20,6 +20,7 @@
 
 #include <glib/gi18n.h>
 #include <ide.h>
+#include <json-glib/json-glib.h>
 
 #include "ide-autotools-project-miner.h"
 
@@ -92,6 +93,87 @@ ide_autotools_project_miner_find_doap (IdeAutotoolsProjectMiner *self,
   return NULL;
 }
 
+static GFile *
+ide_autotools_project_miner_find_flatpak_manifest (IdeAutotoolsProjectMiner *self,
+                                                   GCancellable             *cancellable,
+                                                   GFile                    *directory)
+{
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+  GFileInfo *file_info = NULL;
+
+  g_assert (IDE_IS_AUTOTOOLS_PROJECT_MINER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (G_IS_FILE (directory));
+
+  enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME,
+                                          G_FILE_QUERY_INFO_NONE,
+                                          cancellable,
+                                          NULL);
+  if (!enumerator)
+    return NULL;
+
+  while ((file_info = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
+    {
+      GFileType file_type;
+      g_autofree gchar *name = NULL;
+      g_autofree gchar *path = NULL;
+      g_autoptr(GRegex) filename_regex = NULL;
+      g_autoptr(GMatchInfo) match_info = NULL;
+      g_autoptr(JsonParser) parser = NULL;
+      JsonNode *root = NULL;
+      JsonObject *object = NULL;
+      g_autoptr(GError) error = NULL;
+      GFile *file = NULL;
+
+      file_type = g_file_info_get_file_type (file_info);
+      name = g_strdup (g_file_info_get_name (file_info));
+      g_clear_object (&file_info);
+
+      if (name == NULL || file_type == G_FILE_TYPE_DIRECTORY)
+          continue;
+
+      file = g_file_get_child (directory, name);
+
+      /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
+      filename_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*\\.json$",
+                                    0, 0, NULL);
+
+      g_regex_match (filename_regex, name, 0, &match_info);
+      if (!g_match_info_matches (match_info))
+        {
+          g_clear_object (&file);
+          continue;
+        }
+
+      /* Check if the contents look like a flatpak manifest */
+      path = g_file_get_path (file);
+      parser = json_parser_new ();
+      json_parser_load_from_file (parser, path, &error);
+      if (error)
+        {
+          g_clear_object (&file);
+          continue;
+        }
+
+      root = json_parser_get_root (parser);
+      object = json_node_get_object (root);
+      if ((json_object_get_member (object, "app-id") == NULL &&
+           json_object_get_member (object, "id") == NULL) ||
+           json_object_get_member (object, "runtime") == NULL ||
+           json_object_get_member (object, "modules") == NULL)
+        {
+          g_clear_object (&file);
+          continue;
+        }
+
+      g_debug ("Discovered flatpak manifest at %s", path);
+      return file;
+    }
+
+  return NULL;
+}
+
 static void
 ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
                                         GCancellable             *cancellable,
@@ -101,6 +183,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   g_autofree gchar *uri = NULL;
   g_autofree gchar *name = NULL;
   g_autoptr(GFile) file = NULL;
+  g_autoptr(GFile) flatpak_manifest = NULL;
   g_autoptr(GFile) index_file = NULL;
   g_autoptr(GFileInfo) index_info = NULL;
   g_autoptr(IdeProjectInfo) project_info = NULL;
@@ -123,6 +206,8 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
   mtime = g_file_info_get_attribute_uint64 (file_info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
 
   doap = ide_autotools_project_miner_find_doap (self, cancellable, directory);
+
+  flatpak_manifest = ide_autotools_project_miner_find_flatpak_manifest (self, cancellable, directory);
 
   /*
    * If there is a git repo, trust the .git/index file for time info,
@@ -162,6 +247,7 @@ ide_autotools_project_miner_discovered (IdeAutotoolsProjectMiner *self,
                                "directory", directory,
                                "doap", doap,
                                "file", file,
+                               "flatpak-manifest", flatpak_manifest,
                                "last-modified-at", last_modified_at,
                                "languages", languages,
                                "name", name,

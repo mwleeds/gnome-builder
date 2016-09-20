@@ -45,6 +45,7 @@ struct _IdeProjectInfo
   GDateTime  *last_modified_at;
   GFile      *directory;
   GFile      *file;
+  GFile      *flatpak_manifest;
   gchar      *name;
   gchar      *description;
   gchar     **languages;
@@ -62,6 +63,7 @@ enum {
   PROP_DIRECTORY,
   PROP_DOAP,
   PROP_FILE,
+  PROP_FLATPAK_MANIFEST,
   PROP_IS_RECENT,
   PROP_LANGUAGES,
   PROP_LAST_MODIFIED_AT,
@@ -177,6 +179,23 @@ ide_project_info_get_file (IdeProjectInfo *self)
 }
 
 /**
+ * ide_project_info_get_flatpak_manifest:
+ * @self: (in): A #IdeProjectInfo.
+ *
+ * Gets the #IdeProjectInfo:flatpak-manifest property.
+ * This is the flatpak manifest file for the project.
+ *
+ * Returns: (nullable) (transfer none): A #GFile.
+ */
+GFile *
+ide_project_info_get_flatpak_manifest (IdeProjectInfo *self)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_INFO (self), NULL);
+
+  return self->flatpak_manifest;
+}
+
+/**
  * ide_project_info_get_last_modified_at:
  *
  *
@@ -257,6 +276,17 @@ ide_project_info_set_file (IdeProjectInfo *self,
 }
 
 void
+ide_project_info_set_flatpak_manifest (IdeProjectInfo *self,
+                                       GFile          *flatpak_manifest)
+{
+  g_return_if_fail (IDE_IS_PROJECT_INFO (self));
+  g_return_if_fail (!flatpak_manifest || G_IS_FILE (flatpak_manifest));
+
+  if (g_set_object (&self->flatpak_manifest, flatpak_manifest))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FLATPAK_MANIFEST]);
+}
+
+void
 ide_project_info_set_last_modified_at (IdeProjectInfo *self,
                                        GDateTime      *last_modified_at)
 {
@@ -303,6 +333,7 @@ ide_project_info_finalize (GObject *object)
   g_clear_pointer (&self->name, g_free);
   g_clear_object (&self->directory);
   g_clear_object (&self->file);
+  g_clear_object (&self->flatpak_manifest);
 
   G_OBJECT_CLASS (ide_project_info_parent_class)->finalize (object);
 }
@@ -331,6 +362,10 @@ ide_project_info_get_property (GObject    *object,
 
     case PROP_FILE:
       g_value_set_object (value, ide_project_info_get_file (self));
+      break;
+
+    case PROP_FLATPAK_MANIFEST:
+      g_value_set_object (value, ide_project_info_get_flatpak_manifest (self));
       break;
 
     case PROP_IS_RECENT:
@@ -382,6 +417,10 @@ ide_project_info_set_property (GObject      *object,
 
     case PROP_FILE:
       ide_project_info_set_file (self, g_value_get_object (value));
+      break;
+
+    case PROP_FLATPAK_MANIFEST:
+      ide_project_info_set_flatpak_manifest (self, g_value_get_object (value));
       break;
 
     case PROP_IS_RECENT:
@@ -450,6 +489,13 @@ ide_project_info_class_init (IdeProjectInfoClass *klass)
     g_param_spec_object ("file",
                          "File",
                          "The toplevel project file.",
+                         G_TYPE_FILE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_FLATPAK_MANIFEST] =
+    g_param_spec_object ("flatpak-manifest",
+                         "Flatpak Manifest",
+                         "The flatpak manifest file.",
                          G_TYPE_FILE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

@@ -184,6 +184,7 @@ dnl Check for Required Packages
 dnl ***********************************************************************
 m4_define([gtk_required_version], [3.21.5])
 m4_define([glib_required_version], [2.49.0])
+m4_define([json_glib_required_version], [1.2.3])
 m4_define([gtksourceview_required_version], [3.21.2])
 m4_define([gobject_introspection_version], [1.48.0])
 m4_define([pygobject_required_version], [3.21.0])
@@ -220,6 +221,7 @@ PKG_CHECK_MODULES(TMPL,     [gio-2.0 >= glib_required_version
 			     gobject-introspection-1.0 >= gobject_introspection_version])
 PKG_CHECK_MODULES(XML,      [gio-2.0 >= glib_required_version
                              libxml-2.0 >= libxml_required_version])
+PKG_CHECK_MODULES(JSON_GLIB, json-glib-1.0 >= json_glib_required_version)
 
 
 dnl ***********************************************************************

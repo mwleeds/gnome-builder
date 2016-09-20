@@ -22,7 +22,8 @@ libautotools_plugin_la_SOURCES = \
 	ide-makecache-target.h \
 	$(NULL)
 
-libautotools_plugin_la_CFLAGS = $(PLUGIN_CFLAGS)
+libautotools_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(JSON_GLIB_CFLAGS)
+libautotools_plugin_la_LIBADD = $(PLUGIN_CFLAGS) $(JSON_GLIB_LIBS)
 libautotools_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin

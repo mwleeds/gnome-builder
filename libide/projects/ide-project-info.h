@@ -41,6 +41,7 @@ GDateTime    *ide_project_info_get_last_modified_at (IdeProjectInfo  *self);
 const gchar * const *
               ide_project_info_get_languages        (IdeProjectInfo  *self);
 const gchar  *ide_project_info_get_name             (IdeProjectInfo  *self);
+GFile        *ide_project_info_get_flatpak_manifest (IdeProjectInfo  *self);
 void          ide_project_info_set_file             (IdeProjectInfo  *self,
                                                      GFile           *file);
 void          ide_project_info_set_description      (IdeProjectInfo  *self,
@@ -55,6 +56,8 @@ void          ide_project_info_set_name             (IdeProjectInfo  *self,
                                                      const gchar     *name);
 void          ide_project_info_set_priority         (IdeProjectInfo  *self,
                                                      gint             priority);
+void          ide_project_info_set_flatpak_manifest (IdeProjectInfo  *self,
+                                                     GFile           *flatpak_manifest);
 
 G_END_DECLS
 
