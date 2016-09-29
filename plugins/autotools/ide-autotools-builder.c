@@ -19,7 +19,7 @@
 #include <glib/gi18n.h>
 #include <ide.h>
 
-#include "ide-autotools-build-task.h"
+#include "ide-autotools-build-all-task.h"
 #include "ide-autotools-builder.h"
 
 struct _IdeAutotoolsBuilder
@@ -35,13 +35,13 @@ ide_autotools_builder_build_cb (GObject      *object,
                                 gpointer      user_data)
 {
   g_autoptr(GTask) task = user_data;
-  IdeAutotoolsBuildTask *build_result = (IdeAutotoolsBuildTask *)object;
+  IdeAutotoolsBuildAllTask *build_result = (IdeAutotoolsBuildAllTask *)object;
   GError *error = NULL;
 
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (build_result));
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_ALL_TASK (build_result));
   g_return_if_fail (G_IS_TASK (task));
 
-  if (!ide_autotools_build_task_execute_finish (build_result, result, &error))
+  if (!ide_autotools_build_all_task_execute_finish (build_result, result, &error))
     {
       if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         ide_build_result_set_mode (IDE_BUILD_RESULT (build_result), _("Build cancelled"));
@@ -135,7 +135,7 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
                                    gpointer              user_data)
 {
   IdeAutotoolsBuilder *self = (IdeAutotoolsBuilder *)builder;
-  g_autoptr(IdeAutotoolsBuildTask) build_result = NULL;
+  g_autoptr(IdeAutotoolsBuildAllTask) build_result = NULL;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GFile) directory = NULL;
   IdeConfiguration *configuration;
@@ -152,7 +152,7 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
   context = ide_object_get_context (IDE_OBJECT (builder));
   configuration = ide_builder_get_configuration (IDE_BUILDER (self));
   directory = ide_autotools_builder_get_build_directory (self);
-  build_result = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_TASK,
+  build_result = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_ALL_TASK,
                                "context", context,
                                "configuration", configuration,
                                "directory", directory,
@@ -163,11 +163,11 @@ ide_autotools_builder_build_async (IdeBuilder           *builder,
   if (result != NULL)
     *result = g_object_ref (build_result);
 
-  ide_autotools_build_task_execute_async (build_result,
-                                          flags,
-                                          cancellable,
-                                          ide_autotools_builder_build_cb,
-                                          g_object_ref (task));
+  ide_autotools_build_all_task_execute_async (build_result,
+                                              flags,
+                                              cancellable,
+                                              ide_autotools_builder_build_cb,
+                                              g_object_ref (task));
 }
 
 static IdeBuildResult *
@@ -188,14 +188,14 @@ ide_autotools_builder_install_cb (GObject      *object,
                                   GAsyncResult *result,
                                   gpointer      user_data)
 {
-  IdeAutotoolsBuildTask *build_task = (IdeAutotoolsBuildTask *)object;
+  IdeAutotoolsBuildAllTask *build_task = (IdeAutotoolsBuildAllTask *)object;
   g_autoptr(GTask) task = user_data;
   GError *error = NULL;
 
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (build_task));
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_ALL_TASK (build_task));
   g_assert (G_IS_TASK (task));
 
-  if (!ide_autotools_build_task_execute_finish (build_task, result, &error))
+  if (!ide_autotools_build_all_task_execute_finish (build_task, result, &error))
     {
       if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         ide_build_result_set_mode (IDE_BUILD_RESULT (build_task), _("Install cancelled"));
@@ -219,7 +219,7 @@ ide_autotools_builder_install_async (IdeBuilder           *builder,
                                      gpointer              user_data)
 {
   IdeAutotoolsBuilder *self = (IdeAutotoolsBuilder *)builder;
-  g_autoptr(IdeAutotoolsBuildTask) build_result = NULL;
+  g_autoptr(IdeAutotoolsBuildAllTask) build_result = NULL;
   g_autoptr(GTask) task = NULL;
   g_autoptr(GFile) directory = NULL;
   IdeConfiguration *configuration;
@@ -233,24 +233,25 @@ ide_autotools_builder_install_async (IdeBuilder           *builder,
   context = ide_object_get_context (IDE_OBJECT (builder));
   configuration = ide_builder_get_configuration (IDE_BUILDER (self));
   directory = ide_autotools_builder_get_build_directory (self);
-  build_result = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_TASK,
+  build_result = g_object_new (IDE_TYPE_AUTOTOOLS_BUILD_ALL_TASK,
                                "context", context,
                                "configuration", configuration,
                                "directory", directory,
                                "mode", _("Building…"),
                                "running", TRUE,
+                               "install", TRUE,
                                NULL);
 
-  ide_autotools_build_task_add_target (build_result, "install");
+  ide_autotools_build_all_task_add_target (build_result, "install");
 
   if (result != NULL)
     *result = g_object_ref (build_result);
 
-  ide_autotools_build_task_execute_async (build_result,
-                                          IDE_BUILDER_BUILD_FLAGS_NONE,
-                                          cancellable,
-                                          ide_autotools_builder_install_cb,
-                                          g_object_ref (task));
+  ide_autotools_build_all_task_execute_async (build_result,
+                                              IDE_BUILDER_BUILD_FLAGS_NONE,
+                                              cancellable,
+                                              ide_autotools_builder_install_cb,
+                                              g_object_ref (task));
 }
 
 static IdeBuildResult *

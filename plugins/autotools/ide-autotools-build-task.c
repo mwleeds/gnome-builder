@@ -30,18 +30,11 @@
 
 #include "ide-autotools-build-task.h"
 
-#define FLAG_SET(_f,_n) (((_f) & (_n)) != 0)
-#define FLAG_UNSET(_f,_n) (((_f) & (_n)) == 0)
-
 struct _IdeAutotoolsBuildTask
 {
-  IdeBuildResult    parent;
+  IdeObject         parent;
   IdeConfiguration *configuration;
-  GFile            *directory;
-  GPtrArray        *extra_targets;
-  guint             require_autogen : 1;
-  guint             require_configure : 1;
-  guint             executed : 1;
+  IdeBuildResult   *build_result;
 };
 
 typedef struct
@@ -49,31 +42,25 @@ typedef struct
   gchar                 *directory_path;
   gchar                 *project_path;
   gchar                 *parallel;
-  gchar                 *system_type;
   gchar                **configure_argv;
   gchar                **make_targets;
   IdeRuntime            *runtime;
-  IdeBuildCommandQueue  *postbuild;
-  IdeEnvironment        *environment;
-  guint                  sequence;
   guint                  require_autogen : 1;
   guint                  require_configure : 1;
   guint                  bootstrap_only : 1;
-} WorkerState;
+} BuildWorkerState;
 
 typedef gboolean (*WorkStep) (GTask                 *task,
                               IdeAutotoolsBuildTask *self,
-                              WorkerState           *state,
+                              BuildWorkerState      *state,
                               GCancellable          *cancellable);
 
-G_DEFINE_TYPE (IdeAutotoolsBuildTask, ide_autotools_build_task, IDE_TYPE_BUILD_RESULT)
+G_DEFINE_TYPE (IdeAutotoolsBuildTask, ide_autotools_build_task, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
   PROP_CONFIGURATION,
-  PROP_DIRECTORY,
-  PROP_REQUIRE_AUTOGEN,
-  PROP_REQUIRE_CONFIGURE,
+  PROP_BUILD_RESULT,
   LAST_PROP
 };
 
@@ -85,19 +72,19 @@ static IdeSubprocess *log_and_spawn     (IdeAutotoolsBuildTask  *self,
                                          ...) G_GNUC_NULL_TERMINATED;
 static gboolean       step_mkdirs       (GTask                  *task,
                                          IdeAutotoolsBuildTask  *self,
-                                         WorkerState            *state,
+                                         BuildWorkerState       *state,
                                          GCancellable           *cancellable);
 static gboolean       step_autogen      (GTask                  *task,
                                          IdeAutotoolsBuildTask  *self,
-                                         WorkerState            *state,
+                                         BuildWorkerState       *state,
                                          GCancellable           *cancellable);
 static gboolean       step_configure    (GTask                  *task,
                                          IdeAutotoolsBuildTask  *self,
-                                         WorkerState            *state,
+                                         BuildWorkerState       *state,
                                          GCancellable           *cancellable);
 static gboolean       step_make_all     (GTask                  *task,
                                          IdeAutotoolsBuildTask  *self,
-                                         WorkerState            *state,
+                                         BuildWorkerState       *state,
                                          GCancellable           *cancellable);
 static void           apply_environment (IdeAutotoolsBuildTask  *self,
                                          IdeSubprocessLauncher  *launcher);
@@ -110,84 +97,6 @@ static WorkStep workSteps [] = {
   step_make_all,
   NULL
 };
-
-gboolean
-ide_autotools_build_task_get_require_autogen (IdeAutotoolsBuildTask *self)
-{
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), FALSE);
-
-  return self->require_autogen;
-}
-
-static void
-ide_autotools_build_task_set_require_autogen (IdeAutotoolsBuildTask *self,
-                                              gboolean               require_autogen)
-{
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
-
-  self->require_autogen = !!require_autogen;
-}
-
-gboolean
-ide_autotools_build_task_get_require_configure (IdeAutotoolsBuildTask *self)
-{
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), FALSE);
-
-  return self->require_configure;
-}
-
-static void
-ide_autotools_build_task_set_require_configure (IdeAutotoolsBuildTask *self,
-                                                gboolean               require_configure)
-{
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
-
-  self->require_autogen = !!require_configure;
-}
-
-/**
- * ide_autotools_build_task_get_directory:
- *
- * Fetches the build directory that was used.
- *
- * Returns: (transfer none): A #GFile.
- */
-GFile *
-ide_autotools_build_task_get_directory (IdeAutotoolsBuildTask *self)
-{
-  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), NULL);
-
-  return self->directory;
-}
-
-static void
-ide_autotools_build_task_set_directory (IdeAutotoolsBuildTask *self,
-                                        GFile                 *directory)
-{
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
-  g_return_if_fail (!directory || G_IS_FILE (directory));
-
-  /*
-   * We require a build directory that is accessable via a native path.
-   */
-  if (directory)
-    {
-      g_autofree gchar *path = NULL;
-
-      path = g_file_get_path (directory);
-
-      if (!path)
-        {
-          g_warning (_("Directory must be on a locally mounted filesystem."));
-          return;
-        }
-    }
-
-  if (self->directory != directory)
-    if (g_set_object (&self->directory, directory))
-      g_object_notify_by_pspec (G_OBJECT (self),
-                                properties [PROP_DIRECTORY]);
-}
 
 /**
  * ide_autotools_build_task_get_configuration:
@@ -214,14 +123,37 @@ ide_autotools_build_task_set_configuration (IdeAutotoolsBuildTask *self,
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONFIGURATION]);
 }
 
+/**
+ * ide_autotools_build_task_get_build_result:
+ * @self: An #IdeAutotoolsBuildTask
+ *
+ * Gets the #IdeBuildResult instance being used.
+ */
+IdeBuildResult *
+ide_autotools_build_task_get_build_result (IdeAutotoolsBuildTask *self)
+{
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), NULL);
+
+  return self->build_result;
+}
+
+static void
+ide_autotools_build_task_set_build_result (IdeAutotoolsBuildTask *self,
+                                           IdeBuildResult        *build_result)
+{
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+  g_assert (IDE_IS_BUILD_RESULT (build_result));
+
+  if (g_set_object (&self->build_result, build_result))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_RESULT]);
+}
+
 static void
 ide_autotools_build_task_finalize (GObject *object)
 {
   IdeAutotoolsBuildTask *self = (IdeAutotoolsBuildTask *)object;
 
-  g_clear_object (&self->directory);
   g_clear_object (&self->configuration);
-  g_clear_pointer (&self->extra_targets, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_autotools_build_task_parent_class)->finalize (object);
 }
@@ -240,16 +172,8 @@ ide_autotools_build_task_get_property (GObject    *object,
       g_value_set_object (value, ide_autotools_build_task_get_configuration (self));
       break;
 
-    case PROP_DIRECTORY:
-      g_value_set_object (value, ide_autotools_build_task_get_directory (self));
-      break;
-
-    case PROP_REQUIRE_AUTOGEN:
-      g_value_set_boolean (value, ide_autotools_build_task_get_require_autogen (self));
-      break;
-
-    case PROP_REQUIRE_CONFIGURE:
-      g_value_set_boolean (value, ide_autotools_build_task_get_require_configure (self));
+    case PROP_BUILD_RESULT:
+      g_value_set_object (value, ide_autotools_build_task_get_build_result (self));
       break;
 
     default:
@@ -271,16 +195,8 @@ ide_autotools_build_task_set_property (GObject      *object,
       ide_autotools_build_task_set_configuration (self, g_value_get_object (value));
       break;
 
-    case PROP_DIRECTORY:
-      ide_autotools_build_task_set_directory (self, g_value_get_object (value));
-      break;
-
-    case PROP_REQUIRE_AUTOGEN:
-      ide_autotools_build_task_set_require_autogen (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_REQUIRE_CONFIGURE:
-      ide_autotools_build_task_set_require_configure (self, g_value_get_boolean (value));
+    case PROP_BUILD_RESULT:
+      ide_autotools_build_task_set_build_result (self, g_value_get_object (value));
       break;
 
     default:
@@ -306,32 +222,14 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_DIRECTORY] =
-    g_param_spec_object ("directory",
-                         "Directory",
-                         "The directory to perform the build within.",
-                         G_TYPE_FILE,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_REQUIRE_AUTOGEN] =
-    g_param_spec_boolean ("require-autogen",
-                          "Require Autogen",
-                          "If autogen.sh should be forced to execute.",
-                          FALSE,
-                          (G_PARAM_READWRITE |
-                           G_PARAM_CONSTRUCT_ONLY |
-                           G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_REQUIRE_CONFIGURE] =
-    g_param_spec_boolean ("require-configure",
-                          "Require Configure",
-                          "If configure should be forced to execute.",
-                          FALSE,
-                          (G_PARAM_READWRITE |
-                           G_PARAM_CONSTRUCT_ONLY |
-                           G_PARAM_STATIC_STRINGS));
+  properties [PROP_BUILD_RESULT] =
+    g_param_spec_object ("build-result",
+                        "Build Result",
+                        "The IdeBuildResult instance for this build.",
+                        IDE_TYPE_BUILD_RESULT,
+                        (G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
@@ -341,126 +239,33 @@ ide_autotools_build_task_init (IdeAutotoolsBuildTask *self)
 {
 }
 
-static gchar **
-gen_configure_argv (IdeAutotoolsBuildTask *self,
-                    WorkerState           *state)
-{
-  IdeDevice *device;
-  GPtrArray *ar;
-  const gchar *opts;
-  const gchar *system_type;
-  gchar *prefix;
-  gchar *configure_path;
-
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
-  g_assert (state != NULL);
-
-  ar = g_ptr_array_new_with_free_func (g_free);
-
-  /* ./configure */
-  configure_path = g_build_filename (state->project_path, "configure", NULL);
-  g_ptr_array_add (ar, configure_path);
-
-  /* --prefix /app */
-  if (NULL == (prefix = g_strdup (ide_configuration_get_prefix (self->configuration))))
-    prefix = g_build_filename (state->project_path, "_install", NULL);
-  g_ptr_array_add (ar, g_strdup_printf ("--prefix=%s", prefix));
-  g_free (prefix);
-
-  /* --host=triplet */
-  device = ide_configuration_get_device (self->configuration);
-  system_type = ide_device_get_system_type (device);
-  g_ptr_array_add (ar, g_strdup_printf ("--host=%s", system_type));
-
-  opts = ide_configuration_get_config_opts (self->configuration);
-
-  if (!ide_str_empty0 (opts))
-    {
-      GError *error = NULL;
-      gint argc;
-      gchar **argv;
-
-      if (g_shell_parse_argv (opts, &argc, &argv, &error))
-        {
-          for (guint i = 0; i < argc; i++)
-            g_ptr_array_add (ar, argv [i]);
-          g_free (argv);
-        }
-      else
-        {
-          g_warning ("%s", error->message);
-          g_clear_error (&error);
-        }
-    }
-
-  g_ptr_array_add (ar, NULL);
-
-  return (gchar **)g_ptr_array_free (ar, FALSE);
-}
-
-static WorkerState *
-worker_state_new (IdeAutotoolsBuildTask  *self,
-                  IdeBuilderBuildFlags    flags,
+static BuildWorkerState *
+worker_state_new (IdeAutotoolsBuildTask *self,
+                  IdeRuntime            *runtime,
+                  gchar                 *directory_path,
+                  gchar                 *project_path,
+                  gchar                **configure_argv,
+                  gchar                **make_targets,
+                  guint                  require_autogen,
+                  guint                  require_configure,
+                  guint                  bootstrap_only,
                   GError                **error)
 {
-  g_autofree gchar *name = NULL;
-  IdeContext *context;
-  IdeDevice *device;
-  IdeRuntime *runtime;
-  GPtrArray *make_targets;
-  GFile *project_dir;
-  GFile *project_file;
-  WorkerState *state;
+  BuildWorkerState *state;
   gint val32;
 
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), NULL);
   g_return_val_if_fail (IDE_IS_CONFIGURATION (self->configuration), NULL);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  project_file = ide_context_get_project_file (context);
-
-  device = ide_configuration_get_device (self->configuration);
-  runtime = ide_configuration_get_runtime (self->configuration);
-
-  if (device == NULL)
-    {
-      g_set_error (error,
-                   IDE_DEVICE_ERROR,
-                   IDE_DEVICE_ERROR_NO_SUCH_DEVICE,
-                   "%s “%s”",
-                   _("Failed to locate device"),
-                   ide_configuration_get_device_id (self->configuration));
-      return NULL;
-    }
-
-  if (runtime == NULL)
-    {
-      g_set_error (error,
-                   IDE_RUNTIME_ERROR,
-                   IDE_RUNTIME_ERROR_NO_SUCH_RUNTIME,
-                   "%s “%s”",
-                   _("Failed to locate runtime"),
-                   ide_configuration_get_runtime_id (self->configuration));
-      return NULL;
-    }
-
-  name = g_file_get_basename (project_file);
-
-  if (g_str_has_prefix (name, "configure."))
-    project_dir = g_file_get_parent (project_file);
-  else
-    project_dir = g_object_ref (project_file);
-
-  state = g_slice_new0 (WorkerState);
-  state->sequence = ide_configuration_get_sequence (self->configuration);
-  state->require_autogen = self->require_autogen || FLAG_SET (flags, IDE_BUILDER_BUILD_FLAGS_FORCE_BOOTSTRAP);
-  state->require_configure = self->require_configure || (state->require_autogen && FLAG_UNSET (flags, IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE));
-  state->directory_path = g_file_get_path (self->directory);
-  state->project_path = g_file_get_path (project_dir);
-  state->system_type = g_strdup (ide_device_get_system_type (device));
+  state = g_slice_new0 (BuildWorkerState);
   state->runtime = g_object_ref (runtime);
-  state->postbuild = ide_configuration_get_postbuild (self->configuration);
-  state->environment = ide_environment_copy (ide_configuration_get_environment (self->configuration));
+  state->directory_path = g_strdup (directory_path);
+  state->project_path = g_strdup (project_path);
+  state->configure_argv = g_strdupv (configure_argv);
+  state->make_targets = g_strdupv (make_targets);
+  state->require_autogen = require_autogen;
+  state->require_configure = require_configure;
+  state->bootstrap_only = bootstrap_only;
 
   val32 = ide_configuration_get_parallelism (self->configuration);
 
@@ -471,63 +276,21 @@ worker_state_new (IdeAutotoolsBuildTask  *self,
   else
     state->parallel = g_strdup_printf ("-j%u", val32);
 
-  make_targets = g_ptr_array_new ();
-
-  if (FLAG_SET (flags, IDE_BUILDER_BUILD_FLAGS_FORCE_CLEAN))
-    {
-      if (FLAG_UNSET (flags, IDE_BUILDER_BUILD_FLAGS_NO_BUILD))
-        {
-          state->require_autogen = TRUE;
-          state->require_configure = TRUE;
-        }
-      g_ptr_array_add (make_targets, g_strdup ("clean"));
-    }
-
-  if (FLAG_UNSET (flags, IDE_BUILDER_BUILD_FLAGS_NO_BUILD))
-    g_ptr_array_add (make_targets, g_strdup ("all"));
-
-  if (self->extra_targets != NULL)
-    {
-      for (guint i = 0; i < self->extra_targets->len; i++)
-        {
-          const gchar *target = g_ptr_array_index (self->extra_targets, i);
-
-          g_ptr_array_add (make_targets, g_strdup (target));
-        }
-    }
-
-  g_ptr_array_add (make_targets, NULL);
-
-  state->make_targets = (gchar **)g_ptr_array_free (make_targets, FALSE);
-
-  if (FLAG_SET (flags, IDE_BUILDER_BUILD_FLAGS_NO_CONFIGURE))
-    {
-      state->require_autogen = TRUE;
-      state->require_configure = TRUE;
-      state->bootstrap_only = TRUE;
-      g_clear_pointer (&state->make_targets, (GDestroyNotify)g_strfreev);
-    }
-
-  state->configure_argv = gen_configure_argv (self, state);
-
   return state;
 }
 
 static void
 worker_state_free (void *data)
 {
-  WorkerState *state = data;
+  BuildWorkerState *state = data;
 
   g_free (state->directory_path);
   g_free (state->project_path);
-  g_free (state->system_type);
   g_free (state->parallel);
   g_strfreev (state->configure_argv);
   g_strfreev (state->make_targets);
   g_clear_object (&state->runtime);
-  g_clear_object (&state->postbuild);
-  g_clear_object (&state->environment);
-  g_slice_free (WorkerState, state);
+  g_slice_free (BuildWorkerState, state);
 }
 
 static void
@@ -537,8 +300,7 @@ ide_autotools_build_task_execute_worker (GTask        *task,
                                          GCancellable *cancellable)
 {
   IdeAutotoolsBuildTask *self = source_object;
-  WorkerState *state = task_data;
-  GError *error = NULL;
+  BuildWorkerState *state = task_data;
 
   g_return_if_fail (G_IS_TASK (task));
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
@@ -552,110 +314,26 @@ ide_autotools_build_task_execute_worker (GTask        *task,
         return;
     }
 
-  if (!ide_build_command_queue_execute (state->postbuild,
-                                        state->runtime,
-                                        state->environment,
-                                        IDE_BUILD_RESULT (self),
-                                        cancellable,
-                                        &error))
-    {
-      ide_build_result_log_stderr (IDE_BUILD_RESULT (self), "%s %s", _("Build Failed: "), error->message);
-      g_task_return_error (task, error);
-      return;
-    }
-
   g_task_return_boolean (task, TRUE);
-}
-
-static void
-ide_autotools_build_task_configuration_prebuild_cb (GObject      *object,
-                                                    GAsyncResult *result,
-                                                    gpointer      user_data)
-{
-  IdeBuildCommandQueue *cmdq = (IdeBuildCommandQueue *)object;
-  g_autoptr(GTask) task = user_data;
-  IdeAutotoolsBuildTask *self;
-  GError *error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_BUILD_COMMAND_QUEUE (cmdq));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  self = g_task_get_source_object (task);
-
-  if (!ide_build_command_queue_execute_finish (cmdq, result, &error))
-    {
-
-      ide_build_result_log_stderr (IDE_BUILD_RESULT (self), "%s %s", _("Build Failed: "), error->message);
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  g_task_run_in_thread (task, ide_autotools_build_task_execute_worker);
-
-  IDE_EXIT;
-}
-
-static void
-ide_autotools_build_task_runtime_prebuild_cb (GObject      *object,
-                                              GAsyncResult *result,
-                                              gpointer      user_data)
-{
-  IdeRuntime *runtime = (IdeRuntime *)object;
-  IdeAutotoolsBuildTask *self;
-  g_autoptr(GTask) task = user_data;
-  g_autoptr(IdeBuildCommandQueue) prebuild = NULL;
-  GCancellable *cancellable;
-  GError *error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUNTIME (runtime));
-  g_assert (G_IS_TASK (task));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  if (!ide_runtime_prebuild_finish (runtime, result, &error))
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  /*
-   * Now that the runtime has prepared itself, we need to allow the
-   * configuration's prebuild commands to be executed.
-   */
-
-  self = g_task_get_source_object (task);
-  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
-
-  prebuild = ide_configuration_get_prebuild (self->configuration);
-  g_assert (IDE_IS_BUILD_COMMAND_QUEUE (prebuild));
-
-  cancellable = g_task_get_cancellable (task);
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  ide_build_command_queue_execute_async (prebuild,
-                                         runtime,
-                                         ide_configuration_get_environment (self->configuration),
-                                         IDE_BUILD_RESULT (self),
-                                         cancellable,
-                                         ide_autotools_build_task_configuration_prebuild_cb,
-                                         g_steal_pointer (&task));
-
-  IDE_EXIT;
 }
 
 void
 ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
-                                        IdeBuilderBuildFlags   flags,
+                                        IdeRuntime            *runtime,
+                                        gchar                 *directory_path,
+                                        gchar                 *project_path,
+                                        gchar                **configure_argv,
+                                        gchar                **make_targets,
+                                        guint                  require_autogen,
+                                        guint                  require_configure,
+                                        guint                  bootstrap_only,
                                         GCancellable          *cancellable,
                                         GAsyncReadyCallback    callback,
                                         gpointer               user_data)
 {
   g_autoptr(GTask) task = NULL;
-  WorkerState *state;
   GError *error = NULL;
+  BuildWorkerState *state;
 
   IDE_ENTRY;
 
@@ -666,19 +344,16 @@ ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_autotools_build_task_execute_async);
 
-  if (self->executed)
-    {
-      g_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "%s",
-                               _("Cannot execute build task more than once"));
-      IDE_EXIT;
-    }
-
-  self->executed = TRUE;
-
-  state = worker_state_new (self, flags, &error);
+  state = worker_state_new (self,
+                            runtime,
+                            directory_path,
+                            project_path,
+                            configure_argv,
+                            make_targets,
+                            require_autogen,
+                            require_configure,
+                            bootstrap_only,
+                            &error);
 
   if (state == NULL)
     {
@@ -688,11 +363,7 @@ ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
 
   g_task_set_task_data (task, state, worker_state_free);
 
-  /* Execute the pre-hook for the runtime before we start building. */
-  ide_runtime_prebuild_async (state->runtime,
-                              cancellable,
-                              ide_autotools_build_task_runtime_prebuild_cb,
-                              g_steal_pointer (&task));
+  g_task_run_in_thread (task, ide_autotools_build_task_execute_worker);
 
   IDE_EXIT;
 }
@@ -703,8 +374,6 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
                                          GError                **error)
 {
   GTask *task = (GTask *)result;
-  WorkerState *state;
-  guint sequence;
   gboolean ret;
 
   IDE_ENTRY;
@@ -712,19 +381,13 @@ ide_autotools_build_task_execute_finish (IdeAutotoolsBuildTask  *self,
   g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), FALSE);
   g_return_val_if_fail (G_IS_TASK (task), FALSE);
 
-  state = g_task_get_task_data (G_TASK (task));
-  sequence = ide_configuration_get_sequence (self->configuration);
-
-  if ((state != NULL) && (state->sequence == sequence))
-    ide_configuration_set_dirty (self->configuration, FALSE);
-
   ret = g_task_propagate_boolean (task, error);
 
   /* Mark the task as failed */
   if (ret == FALSE)
-    ide_build_result_set_failed (IDE_BUILD_RESULT (self), TRUE);
+    ide_build_result_set_failed (self->build_result, TRUE);
 
-  ide_build_result_set_running (IDE_BUILD_RESULT (self), FALSE);
+  ide_build_result_set_running (self->build_result, FALSE);
 
   IDE_RETURN (ret);
 }
@@ -751,7 +414,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
                IdeSubprocessLauncher  *launcher,
                GCancellable           *cancellable,
                GError                **error,
-               const gchar           *argv0,
+               const gchar            *argv0,
                ...)
 {
   g_autoptr(GError) local_error = NULL;
@@ -782,7 +445,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
   va_end (args);
 
   pair = g_slice_alloc (sizeof *pair);
-  pair->result = g_object_ref (self);
+  pair->result = g_object_ref (self->build_result);
   pair->message = g_string_free (log, FALSE);
   g_timeout_add (0, log_in_main, pair);
 
@@ -790,7 +453,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
 
   if (ret == NULL)
     {
-      ide_build_result_log_stderr (IDE_BUILD_RESULT (self), "%s %s",
+      ide_build_result_log_stderr (self->build_result, "%s %s",
                                    _("Build Failed: "),
                                    local_error->message);
       g_propagate_error (error, g_steal_pointer (&local_error));
@@ -809,7 +472,7 @@ log_and_spawn (IdeAutotoolsBuildTask  *self,
 static gboolean
 step_mkdirs (GTask                 *task,
              IdeAutotoolsBuildTask *self,
-             WorkerState           *state,
+             BuildWorkerState      *state,
              GCancellable          *cancellable)
 {
   g_assert (G_IS_TASK (task));
@@ -844,7 +507,7 @@ step_mkdirs (GTask                 *task,
 static gboolean
 step_autogen (GTask                 *task,
               IdeAutotoolsBuildTask *self,
-              WorkerState           *state,
+              BuildWorkerState      *state,
               GCancellable          *cancellable)
 {
   g_autofree gchar *autogen_sh_path = NULL;
@@ -886,7 +549,7 @@ step_autogen (GTask                 *task,
       return FALSE;
     }
 
-  ide_build_result_set_mode (IDE_BUILD_RESULT (self), _("Running autogen…"));
+  ide_build_result_set_mode (self->build_result, _("Running autogen…"));
 
   if (NULL == (launcher = ide_runtime_create_launcher (state->runtime, &error)))
     {
@@ -907,7 +570,7 @@ step_autogen (GTask                 *task,
       return FALSE;
     }
 
-  ide_build_result_log_subprocess (IDE_BUILD_RESULT (self), process);
+  ide_build_result_log_subprocess (self->build_result, process);
 
   if (!ide_subprocess_wait_check (process, cancellable, &error))
     {
@@ -931,7 +594,7 @@ step_autogen (GTask                 *task,
 static gboolean
 step_configure (GTask                 *task,
                 IdeAutotoolsBuildTask *self,
-                WorkerState           *state,
+                BuildWorkerState      *state,
                 GCancellable          *cancellable)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
@@ -955,7 +618,7 @@ step_configure (GTask                 *task,
         return TRUE;
     }
 
-  ide_build_result_set_mode (IDE_BUILD_RESULT (self), _("Running configure…"));
+  ide_build_result_set_mode (self->build_result, _("Running configure…"));
 
   if (NULL == (launcher = ide_runtime_create_launcher (state->runtime, &error)))
     return FALSE;
@@ -968,7 +631,7 @@ step_configure (GTask                 *task,
   apply_environment (self, launcher);
 
   config_log = g_strjoinv (" ", state->configure_argv);
-  ide_build_result_log_stdout (IDE_BUILD_RESULT (self), "%s", config_log);
+  ide_build_result_log_stdout (self->build_result, "%s", config_log);
   ide_subprocess_launcher_push_args (launcher, (const gchar * const *)state->configure_argv);
 
   if (NULL == (process = ide_subprocess_launcher_spawn_sync (launcher, cancellable, &error)))
@@ -977,7 +640,7 @@ step_configure (GTask                 *task,
       return FALSE;
     }
 
-  ide_build_result_log_subprocess (IDE_BUILD_RESULT (self), process);
+  ide_build_result_log_subprocess (self->build_result, process);
 
   if (!ide_subprocess_wait_check (process, cancellable, &error))
     {
@@ -997,7 +660,7 @@ step_configure (GTask                 *task,
 static gboolean
 step_make_all  (GTask                 *task,
                 IdeAutotoolsBuildTask *self,
-                WorkerState           *state,
+                BuildWorkerState      *state,
                 GCancellable          *cancellable)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
@@ -1052,9 +715,9 @@ step_make_all  (GTask                 *task,
       const gchar *target = targets [i];
 
       if (ide_str_equal0 (target, "clean"))
-        ide_build_result_set_mode (IDE_BUILD_RESULT (self), _("Cleaning…"));
+        ide_build_result_set_mode (self->build_result, _("Cleaning…"));
       else
-        ide_build_result_set_mode (IDE_BUILD_RESULT (self), _("Building…"));
+        ide_build_result_set_mode (self->build_result, _("Building…"));
 
       process = log_and_spawn (self, launcher, cancellable, &error,
                                make, target, state->parallel, NULL);
@@ -1065,7 +728,7 @@ step_make_all  (GTask                 *task,
           return FALSE;
         }
 
-      ide_build_result_log_subprocess (IDE_BUILD_RESULT (self), process);
+      ide_build_result_log_subprocess (self->build_result, process);
 
       if (!ide_subprocess_wait_check (process, cancellable, &error))
         {
@@ -1088,17 +751,4 @@ apply_environment (IdeAutotoolsBuildTask *self,
 
   environment = ide_configuration_get_environment (self->configuration);
   ide_subprocess_launcher_overlay_environment (launcher, environment);
-}
-
-void
-ide_autotools_build_task_add_target (IdeAutotoolsBuildTask *self,
-                                     const gchar           *target)
-{
-  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
-  g_return_if_fail (target != NULL);
-
-  if (self->extra_targets == NULL)
-    self->extra_targets = g_ptr_array_new_with_free_func (g_free);
-
-  g_ptr_array_add (self->extra_targets, g_strdup (target));
 }

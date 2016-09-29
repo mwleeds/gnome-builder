@@ -26,13 +26,18 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_AUTOTOOLS_BUILD_TASK (ide_autotools_build_task_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeAutotoolsBuildTask, ide_autotools_build_task, IDE, AUTOTOOLS_BUILD_TASK, IdeBuildResult)
+G_DECLARE_FINAL_TYPE (IdeAutotoolsBuildTask, ide_autotools_build_task, IDE, AUTOTOOLS_BUILD_TASK, IdeObject)
 
 GFile    *ide_autotools_build_task_get_directory  (IdeAutotoolsBuildTask  *self);
-void      ide_autotools_build_task_add_target     (IdeAutotoolsBuildTask  *self,
-                                                   const gchar            *target);
 void      ide_autotools_build_task_execute_async  (IdeAutotoolsBuildTask  *self,
-                                                   IdeBuilderBuildFlags    flags,
+                                                   IdeRuntime             *runtime,
+                                                   gchar                  *directory_path,
+                                                   gchar                  *project_path,
+                                                   gchar                 **configure_argv,
+                                                   gchar                 **make_targets,
+                                                   guint                   require_autogen,
+                                                   guint                   require_configure,
+                                                   guint                   bootstrap_only,
                                                    GCancellable           *cancellable,
                                                    GAsyncReadyCallback     callback,
                                                    gpointer                user_data);
