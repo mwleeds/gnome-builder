@@ -14,6 +14,8 @@ libautotools_plugin_la_SOURCES = \
 	ide-autotools-build-target.h \
 	ide-autotools-build-task.c \
 	ide-autotools-build-task.h \
+	ide-autotools-build-all-task.c \
+	ide-autotools-build-all-task.h \
 	ide-autotools-project-miner.c \
 	ide-autotools-project-miner.h \
 	ide-makecache.c \
