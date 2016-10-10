@@ -42,6 +42,7 @@ struct _IdeAutotoolsBuildTask
   guint             require_autogen : 1;
   guint             require_configure : 1;
   guint             executed : 1;
+  guint             install : 1;
 };
 
 typedef struct
@@ -74,6 +75,7 @@ enum {
   PROP_DIRECTORY,
   PROP_REQUIRE_AUTOGEN,
   PROP_REQUIRE_CONFIGURE,
+  PROP_INSTALL,
   LAST_PROP
 };
 
@@ -143,6 +145,23 @@ ide_autotools_build_task_set_require_configure (IdeAutotoolsBuildTask *self,
   g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
 
   self->require_autogen = !!require_configure;
+}
+
+gboolean
+ide_autotools_build_task_get_install (IdeAutotoolsBuildTask *self)
+{
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), FALSE);
+
+  return self->install;
+}
+
+static void
+ide_autotools_build_task_set_install (IdeAutotoolsBuildTask *self,
+                                                gboolean               install)
+{
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+
+  self->install = !!install;
 }
 
 /**
@@ -252,6 +271,10 @@ ide_autotools_build_task_get_property (GObject    *object,
       g_value_set_boolean (value, ide_autotools_build_task_get_require_configure (self));
       break;
 
+    case PROP_INSTALL:
+      g_value_set_boolean (value, ide_autotools_build_task_get_install (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -281,6 +304,10 @@ ide_autotools_build_task_set_property (GObject      *object,
 
     case PROP_REQUIRE_CONFIGURE:
       ide_autotools_build_task_set_require_configure (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_INSTALL:
+      ide_autotools_build_task_set_install (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -328,6 +355,15 @@ ide_autotools_build_task_class_init (IdeAutotoolsBuildTaskClass *klass)
     g_param_spec_boolean ("require-configure",
                           "Require Configure",
                           "If configure should be forced to execute.",
+                          FALSE,
+                          (G_PARAM_READWRITE |
+                           G_PARAM_CONSTRUCT_ONLY |
+                           G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_INSTALL] =
+    g_param_spec_boolean ("install",
+                          "Install",
+                          "If the build is an install.",
                           FALSE,
                           (G_PARAM_READWRITE |
                            G_PARAM_CONSTRUCT_ONLY |
