@@ -682,6 +682,198 @@ ide_autotools_build_task_runtime_prebuild_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static void
+ide_autotools_build_task_configuration_postbuild_cb (GObject      *object,
+                                                     GAsyncResult *result,
+                                                     gpointer      user_data)
+{
+  IdeBuildCommandQueue *cmdq = (IdeBuildCommandQueue *)object;
+  g_autoptr(GTask) task = user_data;
+  IdeAutotoolsBuildTask *self;
+  GError *error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_COMMAND_QUEUE (cmdq));
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+
+  if (!ide_build_command_queue_execute_finish (cmdq, result, &error))
+    {
+      ide_build_result_log_stderr (IDE_BUILD_RESULT (self), "%s %s", _("Build Failed: "), error->message);
+      g_task_return_error (task, error);
+      IDE_EXIT;
+    }
+
+  /* The build finished successfully */
+
+  g_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_autotools_build_task_postbuild_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  IdeRuntime *runtime = (IdeRuntime *)object;
+  g_autoptr(GTask) task = user_data;
+  GCancellable *cancellable;
+  GError *error = NULL;
+  IdeAutotoolsBuildTask *self;
+  WorkerState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUNTIME (runtime));
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  self = g_task_get_source_object (task);
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+
+  if (self->install)
+    {
+      if (!ide_runtime_postinstall_finish (runtime, result, &error))
+        {
+          ide_build_result_log_stderr (IDE_BUILD_RESULT (self), "%s %s", _("Install Failed: "), error->message);
+          g_task_return_error (task, error);
+          IDE_EXIT;
+        }
+    }
+  else
+    {
+      if (!ide_runtime_postbuild_finish (runtime, result, &error))
+        {
+          ide_build_result_log_stderr (IDE_BUILD_RESULT (self), "%s %s", _("Build Failed: "), error->message);
+          g_task_return_error (task, error);
+          IDE_EXIT;
+        }
+    }
+
+  /* Now execute the configuration's post-build commands */
+
+  cancellable = g_task_get_cancellable (task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_task_get_task_data (task);
+  g_assert (state != NULL);
+
+  ide_build_command_queue_execute_async (state->postbuild,
+                                         state->runtime,
+                                         state->environment,
+                                         IDE_BUILD_RESULT (self),
+                                         cancellable,
+                                         ide_autotools_build_task_configuration_postbuild_cb,
+                                         g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gboolean
+ide_autotools_build_task_helper_execute_finish (IdeAutotoolsBuildTask  *self,
+                                                GAsyncResult           *result,
+                                                GError                **error)
+{
+  GTask *task = (GTask *)result;
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (task), FALSE);
+
+  ret = g_task_propagate_boolean (task, error);
+
+  IDE_RETURN (ret);
+}
+
+static void
+ide_autotools_build_task_helper_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  IdeAutotoolsBuildTask *self = (IdeAutotoolsBuildTask *)object;
+  GTask *task = (GTask *)result;
+  g_autoptr(GTask) parent_task = user_data;
+  IdeRuntime *runtime;
+  GCancellable *cancellable;
+  GError *error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+  g_assert (G_IS_TASK (task));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_autotools_build_task_helper_execute_finish (self, result, &error))
+    {
+      ide_build_result_log_stderr (IDE_BUILD_RESULT (self), "%s %s", _("Build Failed: "), error->message);
+      g_task_return_error (task, error);
+      IDE_EXIT;
+    }
+
+  /*
+   * Now that the build finished, run the runtime's post-build function.
+   */
+
+  runtime = ide_configuration_get_runtime (self->configuration);
+  g_assert (IDE_IS_RUNTIME (runtime));
+
+  cancellable = g_task_get_cancellable (task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (self->install)
+    ide_runtime_postinstall_async (runtime,
+                                   cancellable,
+                                   ide_autotools_build_task_postbuild_cb,
+                                   g_steal_pointer (&parent_task));
+  else
+    ide_runtime_postbuild_async (runtime,
+                                 cancellable,
+                                 ide_autotools_build_task_postbuild_cb,
+                                 g_steal_pointer (&parent_task));
+
+  IDE_EXIT;
+}
+
+void
+ide_autotools_build_task_helper_execute_async (IdeAutotoolsBuildTask *self,
+                                               GCancellable          *cancellable,
+                                               GAsyncReadyCallback    callback,
+                                               gpointer               user_data)
+{
+  g_autoptr(GTask) parent_task = user_data;
+  g_autoptr(GTask) task = NULL;
+  WorkerState *state;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_AUTOTOOLS_BUILD_TASK (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (callback != NULL);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_autotools_build_task_helper_execute_async);
+
+  /* The parent task will free the state memory so we don't need to */
+  state = g_task_get_task_data (parent_task);
+  g_assert (state != NULL);
+  g_task_set_task_data (task, state, NULL);
+
+  /* Execute the pre-hook for the runtime before we start building. */
+  ide_runtime_prebuild_async (state->runtime,
+                              cancellable,
+                              ide_autotools_build_task_runtime_prebuild_cb,
+                              g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
 void
 ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
                                         IdeBuilderBuildFlags   flags,
@@ -702,6 +894,16 @@ ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_autotools_build_task_execute_async);
 
+  state = worker_state_new (self, flags, &error);
+
+  if (state == NULL)
+    {
+      g_task_return_error (task, error);
+      IDE_EXIT;
+    }
+
+  g_task_set_task_data (task, state, worker_state_free);
+
   if (self->executed)
     {
       g_task_return_new_error (task,
@@ -714,21 +916,14 @@ ide_autotools_build_task_execute_async (IdeAutotoolsBuildTask *self,
 
   self->executed = TRUE;
 
-  state = worker_state_new (self, flags, &error);
-
-  if (state == NULL)
-    {
-      g_task_return_error (task, error);
-      IDE_EXIT;
-    }
-
-  g_task_set_task_data (task, state, worker_state_free);
-
-  /* Execute the pre-hook for the runtime before we start building. */
-  ide_runtime_prebuild_async (state->runtime,
-                              cancellable,
-                              ide_autotools_build_task_runtime_prebuild_cb,
-                              g_steal_pointer (&task));
+  /*
+   * This helper will execute prebuild and build functions
+   * so postbuild functions can be executed when it finishes.
+   */
+  ide_autotools_build_task_helper_execute_async (self,
+                                                 cancellable,
+                                                 ide_autotools_build_task_helper_cb,
+                                                 g_steal_pointer (&task));
 
   IDE_EXIT;
 }
