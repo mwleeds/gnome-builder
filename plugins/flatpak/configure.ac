@@ -1,4 +1,5 @@
 m4_define([flatpak_required_version], [0.6.0])
+m4_define([json_glib_required_version], [1.2.3])
 
 # --enable-flatpak-plugin=yes/no/auto
 AC_ARG_ENABLE([flatpak-plugin],
@@ -9,7 +10,8 @@ AC_ARG_ENABLE([flatpak-plugin],
 
 AS_IF([test "$enable_flatpak_plugin" != no],[
 	PKG_CHECK_MODULES(FLATPAK,
-	                  [flatpak >= flatpak_required_version],
+	                  [flatpak >= flatpak_required_version
+	                   json-glib-1.0 >= json_glib_required_version],
 	                  [have_flatpak=yes],
 	                  [have_flatpak=no])
 
