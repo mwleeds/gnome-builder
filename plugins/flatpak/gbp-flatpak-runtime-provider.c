@@ -20,6 +20,7 @@
 
 #include <string.h>
 #include <flatpak.h>
+#include <json-glib/json-glib.h>
 
 #include "util/ide-posix.h"
 
@@ -35,6 +36,14 @@ struct _GbpFlatpakRuntimeProvider
   GCancellable        *cancellable;
   GPtrArray           *runtimes;
 };
+
+typedef struct
+{
+  gchar *platform;
+  gchar *branch;
+  gchar *sdk;
+  GFile *file;
+} FlatpakManifest;
 
 static void runtime_provider_iface_init (IdeRuntimeProviderInterface *);
 
@@ -69,6 +78,18 @@ contains_id (GPtrArray   *ar,
     }
 
   return FALSE;
+}
+
+static void
+flatpak_manifest_free (void *data)
+{
+  FlatpakManifest *manifest = data;
+
+  g_free (manifest->branch);
+  g_free (manifest->sdk);
+  g_free (manifest->platform);
+  g_clear_object (&manifest->file);
+  g_slice_free (FlatpakManifest, manifest);
 }
 
 static gboolean
@@ -180,6 +201,165 @@ gbp_flatpak_runtime_provider_load_refs (GbpFlatpakRuntimeProvider  *self,
   return TRUE;
 }
 
+static GPtrArray *
+gbp_flatpak_runtime_find_flatpak_manifests (GbpFlatpakRuntimeProvider *self,
+                                            GCancellable              *cancellable,
+                                            GFile                     *directory,
+                                            GError                   **error)
+{
+  g_autoptr(GFileEnumerator) enumerator = NULL;
+  GFileInfo *file_info = NULL;
+  GPtrArray *ar;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (G_IS_FILE (directory));
+
+  ar = g_ptr_array_new ();
+  g_ptr_array_set_free_func (ar, flatpak_manifest_free);
+
+  enumerator = g_file_enumerate_children (directory,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME,
+                                          G_FILE_QUERY_INFO_NONE,
+                                          cancellable,
+                                          error);
+  if (!enumerator)
+    return NULL;
+
+  while ((file_info = g_file_enumerator_next_file (enumerator, cancellable, NULL)))
+    {
+      GFileType file_type;
+      g_autofree gchar *name = NULL;
+      g_autofree gchar *path = NULL;
+      g_autoptr(GRegex) filename_regex = NULL;
+      g_autoptr(GMatchInfo) match_info = NULL;
+      g_autoptr(JsonParser) parser = NULL;
+      JsonNode *root = NULL;
+      JsonObject *object = NULL;
+      g_autoptr(GError) local_error = NULL;
+      GFile *file = NULL;
+      FlatpakManifest *manifest;
+
+      file_type = g_file_info_get_file_type (file_info);
+      name = g_strdup (g_file_info_get_name (file_info));
+      g_clear_object (&file_info);
+
+      if (name == NULL || file_type == G_FILE_TYPE_DIRECTORY)
+          continue;
+
+      file = g_file_get_child (directory, name);
+
+      /* This regex is based on https://wiki.gnome.org/HowDoI/ChooseApplicationID */
+      filename_regex = g_regex_new ("^[[:alnum:]-_]+\\.[[:alnum:]-_]+(\\.[[:alnum:]-_]+)*\\.json$",
+                                    0, 0, NULL);
+
+      g_regex_match (filename_regex, name, 0, &match_info);
+      if (!g_match_info_matches (match_info))
+        {
+          g_clear_object (&file);
+          continue;
+        }
+
+      /* Check if the contents look like a flatpak manifest */
+      path = g_file_get_path (file);
+      parser = json_parser_new ();
+      json_parser_load_from_file (parser, path, &local_error);
+      if (local_error)
+        {
+          g_clear_object (&file);
+          continue;
+        }
+
+      root = json_parser_get_root (parser);
+      object = json_node_get_object (root);
+      if ((json_object_get_member (object, "app-id") == NULL &&
+           json_object_get_member (object, "id") == NULL) ||
+           json_object_get_member (object, "runtime") == NULL ||
+           json_object_get_member (object, "modules") == NULL)
+        {
+          g_clear_object (&file);
+          continue;
+        }
+
+      IDE_TRACE_MSG ("Discovered flatpak manifest at %s", path);
+
+      manifest = g_slice_new0 (FlatpakManifest);
+      manifest->file = file;
+      manifest->platform = json_node_dup_string (json_object_get_member (object, "runtime"));
+      manifest->branch = json_node_dup_string (json_object_get_member (object, "runtime-version"));
+      manifest->sdk = json_node_dup_string (json_object_get_member (object, "sdk"));
+
+      g_ptr_array_add (ar, manifest);
+    }
+
+  return ar;
+}
+
+static gboolean
+gbp_flatpak_runtime_provider_load_manifests (GbpFlatpakRuntimeProvider  *self,
+                                             GPtrArray                  *runtimes,
+                                             GCancellable               *cancellable,
+                                             GError                    **error)
+{
+  g_autoptr(GPtrArray) ar = NULL;
+  g_autoptr(GFileInfo) file_info = NULL;
+  IdeContext *context;
+  GFile *project_file;
+  g_autoptr(GFile) project_dir = NULL;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME_PROVIDER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self->manager));
+  project_file = ide_context_get_project_file (context);
+
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (G_IS_FILE (project_file));
+
+  file_info = g_file_query_info (project_file,
+                                 G_FILE_ATTRIBUTE_STANDARD_TYPE,
+                                 G_FILE_QUERY_INFO_NONE,
+                                 cancellable,
+                                 error);
+
+  if (file_info == NULL)
+    return FALSE;
+
+  if (g_file_info_get_file_type (file_info) == G_FILE_TYPE_DIRECTORY)
+    project_dir = g_object_ref (project_file);
+  else
+    project_dir = g_file_get_parent (project_file);
+
+  ar = gbp_flatpak_runtime_find_flatpak_manifests (self, cancellable, project_dir, error);
+
+  if (ar == NULL)
+    return FALSE;
+
+  IDE_TRACE_MSG ("Found %u flatpak manifests", ar->len);
+
+  for (guint i = 0; i < ar->len; i++)
+    {
+      FlatpakManifest *manifest = g_ptr_array_index (ar, i);
+      gchar *id;
+
+      id = g_file_get_basename (manifest->file);
+      if (contains_id (runtimes, id))
+        continue;
+
+      g_ptr_array_add (runtimes,
+                       g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
+                                     "branch", manifest->branch,
+                                     "sdk", manifest->sdk,
+                                     "platform", manifest->platform,
+                                     "manifest", manifest->file,
+                                     "context", context,
+                                     "id", id,
+                                     "display-name", id,
+                                     NULL));
+    }
+
+  return TRUE;
+}
+
 static void
 gbp_flatpak_runtime_provider_load_worker (GTask        *task,
                                           gpointer      source_object,
@@ -200,6 +380,7 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
 
   ret = g_ptr_array_new_with_free_func (g_object_unref);
 
+  /* Load system flatpak runtimes */
   if (NULL == (self->system_installation = flatpak_installation_new_system (cancellable, &error)) ||
       !gbp_flatpak_runtime_provider_load_refs (self, self->system_installation, ret, cancellable, &error))
     {
@@ -207,11 +388,19 @@ gbp_flatpak_runtime_provider_load_worker (GTask        *task,
       g_clear_error (&error);
     }
 
+  /* Load user flatpak runtimes */
   path = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
   file = g_file_new_for_path (path);
 
   if (NULL == (self->user_installation = flatpak_installation_new_for_path (file, TRUE, cancellable, &error)) ||
       !gbp_flatpak_runtime_provider_load_refs (self, self->user_installation, ret, cancellable, &error))
+    {
+      g_warning ("%s", error->message);
+      g_clear_error (&error);
+    }
+
+  /* Load flatpak manifests in the repo */
+  if (!gbp_flatpak_runtime_provider_load_manifests (self, ret, cancellable, &error))
     {
       g_warning ("%s", error->message);
       g_clear_error (&error);

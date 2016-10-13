@@ -25,6 +25,7 @@ struct _GbpFlatpakRuntime
   gchar *sdk;
   gchar *platform;
   gchar *branch;
+  GFile *manifest;
 };
 
 G_DEFINE_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, IDE_TYPE_RUNTIME)
@@ -34,6 +35,7 @@ enum {
   PROP_BRANCH,
   PROP_PLATFORM,
   PROP_SDK,
+  PROP_MANIFEST,
   LAST_PROP
 };
 
@@ -237,6 +239,10 @@ gbp_flatpak_runtime_get_property (GObject    *object,
       g_value_set_string (value, self->sdk);
       break;
 
+    case PROP_MANIFEST:
+      g_value_set_object (value, self->manifest);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
@@ -264,6 +270,10 @@ gbp_flatpak_runtime_set_property (GObject      *object,
       self->sdk = g_value_dup_string (value);
       break;
 
+    case PROP_MANIFEST:
+      self->manifest = g_value_dup_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
@@ -277,6 +287,7 @@ gbp_flatpak_runtime_finalize (GObject *object)
   g_clear_pointer (&self->sdk, g_free);
   g_clear_pointer (&self->platform, g_free);
   g_clear_pointer (&self->branch, g_free);
+  g_clear_object (&self->manifest);
 
   G_OBJECT_CLASS (gbp_flatpak_runtime_parent_class)->finalize (object);
 }
@@ -320,6 +331,15 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
                          "Sdk",
                          "Sdk",
                          "org.gnome.Sdk",
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_MANIFEST] =
+    g_param_spec_string ("manifest",
+                         "Manifest",
+                         "Manifest file for use with flatpak-builder",
+                         NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT |
                           G_PARAM_STATIC_STRINGS));

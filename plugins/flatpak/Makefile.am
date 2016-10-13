@@ -17,8 +17,8 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-plugin.c \
 	$(NULL)
 
-libflatpak_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(FLATPAK_CFLAGS)
-libflatpak_plugin_la_LIBADD = $(FLATPAK_LIBS)
+libflatpak_plugin_la_CFLAGS = $(PLUGIN_CFLAGS) $(FLATPAK_CFLAGS) $(JSON_GLIB_CFLAGS)
+libflatpak_plugin_la_LIBADD = $(FLATPAK_LIBS) $(JSON_GLIB_LIBS)
 libflatpak_plugin_la_LDFLAGS = $(PLUGIN_LDFLAGS)
 
 include $(top_srcdir)/plugins/Makefile.plugin
