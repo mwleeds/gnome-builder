@@ -1,4 +1,4 @@
-m4_define([flatpak_required_version], [0.6.0])
+m4_define([flatpak_required_version], [0.6.9])
 m4_define([json_glib_required_version], [1.2.3])
 
 # --enable-flatpak-plugin=yes/no/auto
