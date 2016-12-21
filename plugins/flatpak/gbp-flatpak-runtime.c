@@ -460,7 +460,7 @@ gbp_flatpak_runtime_prebuild_worker (GTask        *task,
       g_autoptr(IdeSubprocessLauncher) launcher6 = NULL;
       g_autoptr(IdeSubprocess) process6 = NULL;
 
-      app_id = self->app_id;
+      app_id = ide_configuration_get_app_id (configuration);
       if (ide_str_empty0 (app_id))
         {
           g_warning ("Could not determine application ID");
@@ -677,7 +677,7 @@ gbp_flatpak_runtime_postinstall_worker (GTask        *task,
       return;
     }
 
-  app_id = self->app_id;
+  app_id = ide_configuration_get_app_id (configuration);
   if (ide_str_empty0 (app_id))
     {
       g_warning ("Could not determine application ID");
@@ -910,7 +910,6 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   IdeConfiguration *configuration;
   GbpFlatpakRunner *runner;
   const gchar *app_id = NULL;
-  const gchar *config_app_id = NULL;
   g_autofree gchar *own_name = NULL;
   g_autofree gchar *app_id_override = NULL;
 
@@ -924,31 +923,20 @@ gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
   runner = gbp_flatpak_runner_new (context);
   g_assert (GBP_IS_FLATPAK_RUNNER (runner));
 
-  app_id = self->app_id;
-  config_app_id = ide_configuration_get_app_id (configuration);
+  app_id = ide_configuration_get_app_id (configuration);
   if (ide_str_empty0 (app_id))
     {
       g_warning ("Could not determine application ID");
       app_id = "org.gnome.FlatpakApp";
     }
 
-  if (g_strcmp0 (app_id, config_app_id) != 0)
-    {
-      own_name = g_strdup_printf ("--own-name=%s", config_app_id);
-      app_id_override = g_strdup_printf ("--gapplication-app-id=%s", config_app_id);
-    }
-
   ide_runner_set_run_on_host (IDE_RUNNER (runner), TRUE);
   ide_runner_append_argv (IDE_RUNNER (runner), "flatpak");
   ide_runner_append_argv (IDE_RUNNER (runner), "run");
-  if (own_name != NULL)
-    ide_runner_append_argv (IDE_RUNNER (runner), own_name);
   ide_runner_append_argv (IDE_RUNNER (runner), "--share=ipc");
   ide_runner_append_argv (IDE_RUNNER (runner), "--socket=x11");
   ide_runner_append_argv (IDE_RUNNER (runner), "--socket=wayland");
   ide_runner_append_argv (IDE_RUNNER (runner), app_id);
-  if (app_id_override)
-    ide_runner_append_argv (IDE_RUNNER (runner), app_id_override);
 
   return IDE_RUNNER (runner);
 }
@@ -1164,7 +1152,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
   runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
-
+//TODO delete the properties that were moved by configuration
   properties [PROP_BRANCH] =
     g_param_spec_string ("branch",
                          "Branch",
