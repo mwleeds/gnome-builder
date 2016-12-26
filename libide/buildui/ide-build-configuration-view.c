@@ -26,10 +26,8 @@
 #include "ide-environment-editor.h"
 #include "ide-internal.h"
 
-struct _IdeBuildConfigurationView
+typedef struct
 {
-  EggColumnLayout       parent_instance;
-
   IdeConfiguration     *configuration;
 
   GBinding             *configure_binding;
@@ -42,7 +40,7 @@ struct _IdeBuildConfigurationView
   IdeEnvironmentEditor *environment_editor;
   GtkEntry             *prefix_entry;
   GtkListBox           *runtime_list_box;
-};
+} IdeBuildConfigurationViewPrivate;
 
 enum {
   PROP_0,
@@ -50,7 +48,7 @@ enum {
   LAST_PROP
 };
 
-G_DEFINE_TYPE (IdeBuildConfigurationView, ide_build_configuration_view, EGG_TYPE_COLUMN_LAYOUT)
+G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildConfigurationView, ide_build_configuration_view, EGG_TYPE_COLUMN_LAYOUT)
 
 static GParamSpec *properties [LAST_PROP];
 
@@ -181,6 +179,7 @@ device_row_activated (IdeBuildConfigurationView *self,
                       GtkListBoxRow             *row,
                       GtkListBox                *list_box)
 {
+  IdeBuildConfigurationViewPrivate *priv = ide_build_configuration_view_get_instance_private (self);
   IdeDevice *device;
 
   g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
@@ -189,8 +188,8 @@ device_row_activated (IdeBuildConfigurationView *self,
 
   device = g_object_get_data (G_OBJECT (row), "IDE_DEVICE");
 
-  if (self->configuration != NULL)
-    ide_configuration_set_device (self->configuration, device);
+  if (priv->configuration != NULL)
+    ide_configuration_set_device (priv->configuration, device);
 }
 
 static void
@@ -198,6 +197,7 @@ runtime_row_activated (IdeBuildConfigurationView *self,
                        GtkListBoxRow             *row,
                        GtkListBox                *list_box)
 {
+  IdeBuildConfigurationViewPrivate *priv = ide_build_configuration_view_get_instance_private (self);
   IdeRuntime *runtime;
 
   g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
@@ -206,8 +206,8 @@ runtime_row_activated (IdeBuildConfigurationView *self,
 
   runtime = g_object_get_data (G_OBJECT (row), "IDE_RUNTIME");
 
-  if (self->configuration != NULL)
-    ide_configuration_set_runtime (self->configuration, runtime);
+  if (priv->configuration != NULL)
+    ide_configuration_set_runtime (priv->configuration, runtime);
 }
 
 static gboolean
@@ -225,6 +225,7 @@ static void
 ide_build_configuration_view_connect (IdeBuildConfigurationView *self,
                                       IdeConfiguration          *configuration)
 {
+  IdeBuildConfigurationViewPrivate *priv = ide_build_configuration_view_get_instance_private (self);
   IdeRuntimeManager *runtime_manager;
   IdeDeviceManager *device_manager;
   IdeContext *context;
@@ -237,64 +238,67 @@ ide_build_configuration_view_connect (IdeBuildConfigurationView *self,
   runtime_manager = ide_context_get_runtime_manager (context);
   device_manager = ide_context_get_device_manager (context);
 
-  self->display_name_binding =
+  priv->display_name_binding =
     g_object_bind_property_full (configuration, "display-name",
-                                 self->display_name_entry, "text",
+                                 priv->display_name_entry, "text",
                                  G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL,
                                  treat_null_as_empty, NULL, NULL, NULL);
 
-  self->configure_binding =
+  priv->configure_binding =
     g_object_bind_property_full (configuration, "config-opts",
-                                 self->configure_entry, "text",
+                                 priv->configure_entry, "text",
                                  G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL,
                                  treat_null_as_empty, NULL, NULL, NULL);
 
-  self->prefix_binding =
+  priv->prefix_binding =
     g_object_bind_property_full (configuration, "prefix",
-                                 self->prefix_entry, "text",
+                                 priv->prefix_entry, "text",
                                  G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL,
                                  treat_null_as_empty, NULL, NULL, NULL);
 
-  gtk_list_box_bind_model (self->runtime_list_box,
+  gtk_list_box_bind_model (priv->runtime_list_box,
                            G_LIST_MODEL (runtime_manager),
                            create_runtime_row,
                            g_object_ref (configuration),
                            g_object_unref);
 
-  gtk_list_box_bind_model (self->device_list_box,
+  gtk_list_box_bind_model (priv->device_list_box,
                            G_LIST_MODEL (device_manager),
                            create_device_row,
                            g_object_ref (configuration),
                            g_object_unref);
 
   environment = ide_configuration_get_environment (configuration);
-  ide_environment_editor_set_environment (self->environment_editor, environment);
+  ide_environment_editor_set_environment (priv->environment_editor, environment);
 }
 
 static void
 ide_build_configuration_view_disconnect (IdeBuildConfigurationView *self,
                                          IdeConfiguration          *configuration)
 {
+  IdeBuildConfigurationViewPrivate *priv = ide_build_configuration_view_get_instance_private (self);
+
   g_assert (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
   g_assert (IDE_IS_CONFIGURATION (configuration));
 
-  gtk_list_box_bind_model (self->device_list_box, NULL, NULL, NULL, NULL);
-  gtk_list_box_bind_model (self->runtime_list_box, NULL, NULL, NULL, NULL);
+  gtk_list_box_bind_model (priv->device_list_box, NULL, NULL, NULL, NULL);
+  gtk_list_box_bind_model (priv->runtime_list_box, NULL, NULL, NULL, NULL);
 
-  g_clear_pointer (&self->configure_binding, g_binding_unbind);
-  g_clear_pointer (&self->display_name_binding, g_binding_unbind);
-  g_clear_pointer (&self->prefix_binding, g_binding_unbind);
+  g_clear_pointer (&priv->configure_binding, g_binding_unbind);
+  g_clear_pointer (&priv->display_name_binding, g_binding_unbind);
+  g_clear_pointer (&priv->prefix_binding, g_binding_unbind);
 }
 
 static void
 ide_build_configuration_view_destroy (GtkWidget *widget)
 {
   IdeBuildConfigurationView *self = (IdeBuildConfigurationView *)widget;
+  IdeBuildConfigurationViewPrivate *priv = ide_build_configuration_view_get_instance_private (self);
 
-  if (self->configuration != NULL)
+  if (priv->configuration != NULL)
     {
-      ide_build_configuration_view_disconnect (self, self->configuration);
-      g_clear_object (&self->configuration);
+      ide_build_configuration_view_disconnect (self, priv->configuration);
+      g_clear_object (&priv->configuration);
     }
 
   GTK_WIDGET_CLASS (ide_build_configuration_view_parent_class)->destroy (widget);
@@ -360,12 +364,12 @@ ide_build_configuration_view_class_init (IdeBuildConfigurationViewClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/plugins/buildui/ide-build-configuration-view.ui");
   gtk_widget_class_set_css_name (widget_class, "configurationview");
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, configure_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, device_list_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, display_name_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, environment_editor);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, prefix_entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeBuildConfigurationView, runtime_list_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeBuildConfigurationView, configure_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeBuildConfigurationView, device_list_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeBuildConfigurationView, display_name_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeBuildConfigurationView, environment_editor);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeBuildConfigurationView, prefix_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeBuildConfigurationView, runtime_list_box);
 
   g_type_ensure (IDE_TYPE_ENVIRONMENT_EDITOR);
 }
@@ -373,15 +377,17 @@ ide_build_configuration_view_class_init (IdeBuildConfigurationViewClass *klass)
 static void
 ide_build_configuration_view_init (IdeBuildConfigurationView *self)
 {
+  IdeBuildConfigurationViewPrivate *priv = ide_build_configuration_view_get_instance_private (self);
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect_object (self->device_list_box,
+  g_signal_connect_object (priv->device_list_box,
                            "row-activated",
                            G_CALLBACK (device_row_activated),
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (self->runtime_list_box,
+  g_signal_connect_object (priv->runtime_list_box,
                            "row-activated",
                            G_CALLBACK (runtime_row_activated),
                            self,
@@ -391,29 +397,33 @@ ide_build_configuration_view_init (IdeBuildConfigurationView *self)
 IdeConfiguration *
 ide_build_configuration_view_get_configuration (IdeBuildConfigurationView *self)
 {
+  IdeBuildConfigurationViewPrivate *priv = ide_build_configuration_view_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_BUILD_CONFIGURATION_VIEW (self), NULL);
 
-  return self->configuration;
+  return priv->configuration;
 }
 
 void
 ide_build_configuration_view_set_configuration (IdeBuildConfigurationView *self,
                                                 IdeConfiguration          *configuration)
 {
+  IdeBuildConfigurationViewPrivate *priv = ide_build_configuration_view_get_instance_private (self);
+
   g_return_if_fail (IDE_IS_BUILD_CONFIGURATION_VIEW (self));
   g_return_if_fail (!configuration || IDE_IS_CONFIGURATION (configuration));
 
-  if (self->configuration != configuration)
+  if (priv->configuration != configuration)
     {
-      if (self->configuration != NULL)
+      if (priv->configuration != NULL)
         {
-          ide_build_configuration_view_disconnect (self, self->configuration);
-          g_clear_object (&self->configuration);
+          ide_build_configuration_view_disconnect (self, priv->configuration);
+          g_clear_object (&priv->configuration);
         }
 
       if (configuration != NULL)
         {
-          self->configuration = g_object_ref (configuration);
+          priv->configuration = g_object_ref (configuration);
           ide_build_configuration_view_connect (self, configuration);
         }
 

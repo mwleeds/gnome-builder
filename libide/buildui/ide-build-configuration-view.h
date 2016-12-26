@@ -27,7 +27,29 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_CONFIGURATION_VIEW (ide_build_configuration_view_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeBuildConfigurationView, ide_build_configuration_view, IDE, BUILD_CONFIGURATION_VIEW, EggColumnLayout)
+G_DECLARE_DERIVABLE_TYPE (IdeBuildConfigurationView, ide_build_configuration_view, IDE, BUILD_CONFIGURATION_VIEW, EggColumnLayout)
+
+struct _IdeBuildConfigurationViewClass
+{
+  EggColumnLayoutClass parent;
+
+  gpointer _reserved1;
+  gpointer _reserved2;
+  gpointer _reserved3;
+  gpointer _reserved4;
+  gpointer _reserved5;
+  gpointer _reserved6;
+  gpointer _reserved7;
+  gpointer _reserved8;
+  gpointer _reserved9;
+  gpointer _reserved10;
+  gpointer _reserved11;
+  gpointer _reserved12;
+  gpointer _reserved13;
+  gpointer _reserved14;
+  gpointer _reserved15;
+  gpointer _reserved16;
+};
 
 IdeConfiguration *ide_build_configuration_view_get_configuration (IdeBuildConfigurationView *self);
 void              ide_build_configuration_view_set_configuration (IdeBuildConfigurationView *self,
