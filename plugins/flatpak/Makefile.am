@@ -14,6 +14,8 @@ libflatpak_plugin_la_SOURCES = \
 	gbp-flatpak-configuration.h \
 	gbp-flatpak-configuration-provider.c \
 	gbp-flatpak-configuration-provider.h \
+	gbp-flatpak-configuration-view.c \
+	gbp-flatpak-configuration-view.h \
 	gbp-flatpak-runtime-provider.c \
 	gbp-flatpak-runtime-provider.h \
 	gbp-flatpak-runtime.c \

@@ -270,6 +270,8 @@ ide_build_configuration_view_connect (IdeBuildConfigurationView *self,
 
   environment = ide_configuration_get_environment (configuration);
   ide_environment_editor_set_environment (priv->environment_editor, environment);
+
+  IDE_BUILD_CONFIGURATION_VIEW_GET_CLASS (self)->connect (self, configuration);
 }
 
 static void
@@ -287,6 +289,8 @@ ide_build_configuration_view_disconnect (IdeBuildConfigurationView *self,
   g_clear_pointer (&priv->configure_binding, g_binding_unbind);
   g_clear_pointer (&priv->display_name_binding, g_binding_unbind);
   g_clear_pointer (&priv->prefix_binding, g_binding_unbind);
+
+  IDE_BUILD_CONFIGURATION_VIEW_GET_CLASS (self)->disconnect (self, configuration);
 }
 
 static void

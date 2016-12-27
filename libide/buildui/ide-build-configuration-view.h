@@ -33,8 +33,12 @@ struct _IdeBuildConfigurationViewClass
 {
   EggColumnLayoutClass parent;
 
-  gpointer _reserved1;
-  gpointer _reserved2;
+  void   (*connect)    (IdeBuildConfigurationView *self,
+                        IdeConfiguration          *configuration);
+
+  void   (*disconnect) (IdeBuildConfigurationView *self,
+                        IdeConfiguration          *configuration);
+
   gpointer _reserved3;
   gpointer _reserved4;
   gpointer _reserved5;
