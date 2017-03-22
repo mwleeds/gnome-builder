@@ -37,6 +37,7 @@ SUBDIRS =                            \
 	retab                        \
 	rust-langserv                \
 	rustup                       \
+	simple                       \
 	support                      \
 	symbol-tree                  \
 	sysmon                       \

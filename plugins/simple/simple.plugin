@@ -1,0 +1,11 @@
+[Plugin]
+Module=simple_plugin
+Loader=python3
+Name=Simple
+Description=Provides support for projects using flatpak-builder's "simple" buildsystem
+Authors=Matthew Leeds <mleeds@redhat.com>
+Copyright=Copyright © 2017 Matthew Leeds
+Builtin=true
+Hidden=true
+X-Project-File-Filter-Pattern=*.*.json
+X-Project-File-Filter-Name=Flatpak Simple Buildsystem Project

@@ -326,6 +326,7 @@ m4_include([plugins/quick-highlight/configure.ac])
 m4_include([plugins/retab/configure.ac])
 m4_include([plugins/rust-langserv/configure.ac])
 m4_include([plugins/rustup/configure.ac])
+m4_include([plugins/simple/configure.ac])
 m4_include([plugins/support/configure.ac])
 m4_include([plugins/symbol-tree/configure.ac])
 m4_include([plugins/sysmon/configure.ac])
@@ -613,6 +614,7 @@ echo "  Quick Highlight ...................... : ${enable_quick_highlight_plugin
 echo "  Retab................................. : ${enable_retab_plugin}"
 echo "  Rust Language Server ................. : ${enable_rust_langserv_plugin}"
 echo "  RustUp ............................... : ${enable_rustup_plugin}"
+echo "  Simple Buildsystem ................... : ${enable_simple_plugin}"
 echo "  Support .............................. : ${enable_support_plugin}"
 echo "  System Monitor ....................... : ${enable_sysmon_plugin}"
 echo "  Sysprof System Profiler .............. : ${enable_sysprof_plugin}"

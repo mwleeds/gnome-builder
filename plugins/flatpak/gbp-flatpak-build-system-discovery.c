@@ -167,12 +167,6 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
           if (ide_str_equal0 (buildsystem, "cmake-ninja"))
             buildsystem = "cmake";
 
-          /* TODO: We could maybe support this if we properly extract the
-           *       build-commands property from the manifest.
-           */
-          else if (ide_str_equal0 (buildsystem, "simple"))
-            IDE_RETURN (NULL);
-
           ret = g_strdup (buildsystem);
           IDE_TRACE_MSG ("Discovered buildsystem of type \"%s\"", ret);
           IDE_RETURN (ret);
