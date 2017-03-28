@@ -34,6 +34,7 @@
 
 typedef struct
 {
+  gchar         **build_commands;
   gchar          *config_opts;
   gchar          *device_id;
   gchar          *display_name;
@@ -66,6 +67,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeConfiguration, ide_configuration, IDE_TYPE_OBJECT
 
 enum {
   PROP_0,
+  PROP_BUILD_COMMANDS,
   PROP_CONFIG_OPTS,
   PROP_DEBUG,
   PROP_DEVICE,
@@ -333,6 +335,7 @@ ide_configuration_finalize (GObject *object)
 
   g_clear_object (&priv->environment);
 
+  g_clear_pointer (&priv->build_commands, g_strfreev);
   g_clear_pointer (&priv->internal, g_hash_table_unref);
   g_clear_pointer (&priv->config_opts, g_free);
   g_clear_pointer (&priv->device_id, g_free);
@@ -357,6 +360,10 @@ ide_configuration_get_property (GObject    *object,
     {
     case PROP_CONFIG_OPTS:
       g_value_set_string (value, ide_configuration_get_config_opts (self));
+      break;
+
+    case PROP_BUILD_COMMANDS:
+      g_value_set_boxed (value, ide_configuration_get_build_commands (self));
       break;
 
     case PROP_DEBUG:
@@ -426,6 +433,10 @@ ide_configuration_set_property (GObject      *object,
       ide_configuration_set_config_opts (self, g_value_get_string (value));
       break;
 
+    case PROP_BUILD_COMMANDS:
+      ide_configuration_set_build_commands (self, g_value_get_boxed (value));
+      break;
+
     case PROP_DEBUG:
       ide_configuration_set_debug (self, g_value_get_boolean (value));
       break;
@@ -489,6 +500,15 @@ ide_configuration_class_init (IdeConfigurationClass *klass)
   klass->set_device = ide_configuration_real_set_device;
   klass->get_runtime = ide_configuration_real_get_runtime;
   klass->set_runtime = ide_configuration_real_set_runtime;
+
+  properties [PROP_BUILD_COMMANDS] =
+    g_param_spec_boxed ("build-commands",
+                        "Build commands",
+                        "Build commands",
+                        G_TYPE_STRV,
+                        (G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT |
+                         G_PARAM_STATIC_STRINGS));
 
   properties [PROP_CONFIG_OPTS] =
     g_param_spec_string ("config-opts",
@@ -1113,6 +1133,32 @@ ide_configuration_set_config_opts (IdeConfiguration *self,
       priv->config_opts = g_strdup (config_opts);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONFIG_OPTS]);
       ide_configuration_set_dirty (self, TRUE);
+    }
+}
+
+const gchar * const *
+ide_configuration_get_build_commands (IdeConfiguration *self)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_CONFIGURATION (self), NULL);
+
+  return (const gchar * const *)priv->build_commands;
+}
+
+void
+ide_configuration_set_build_commands (IdeConfiguration *self,
+                                      const gchar * const     *build_commands)
+{
+  IdeConfigurationPrivate *priv = ide_configuration_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_CONFIGURATION (self));
+
+  if (priv->build_commands != (gchar **)build_commands)
+    {
+      g_strfreev (priv->build_commands);
+      priv->build_commands = g_strdupv ((gchar **)build_commands);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_COMMANDS]);
     }
 }
 
