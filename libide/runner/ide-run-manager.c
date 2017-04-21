@@ -1033,11 +1033,19 @@ ide_run_manager_action_stop (GSimpleAction *action,
 static void
 ide_run_manager_init (IdeRunManager *self)
 {
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+  GAction *run_action;
+  GAction *run_with_action;
+
   static GActionEntry actions[] = {
     { "run", ide_run_manager_action_run },
     { "run-with-handler", ide_run_manager_action_run_with_handler, "s" },
     { "stop", ide_run_manager_action_stop }
   };
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
 
   self->actions = g_simple_action_group_new ();
 
@@ -1045,6 +1053,11 @@ ide_run_manager_init (IdeRunManager *self)
                                    actions,
                                    G_N_ELEMENTS (actions),
                                    self);
+
+  run_action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "run");
+  run_with_action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "run-with-handler");
+  g_object_bind_property (build_manager, "can-build", run_action, "enabled" 0);
+  g_object_bind_property (build_manager, "can-build", run_with_action, "enabled" 0);
 
   ide_run_manager_add_handler (self,
                                "run",
