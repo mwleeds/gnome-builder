@@ -424,7 +424,15 @@ ide_run_manager_install_cb (GObject      *object,
 static void
 ide_run_manager_notify_busy (IdeRunManager *self)
 {
+  IdeBuildManager *build_manager;
+  IdeContext *context;
+  gboolean can_build;
+
   g_assert (IDE_IS_RUN_MANAGER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_context_get_build_manager (context);
+  can_build = ide_build_manager_get_can_build (build_manager);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
   g_action_group_action_enabled_changed (G_ACTION_GROUP (self), "run", self->busy == FALSE);
