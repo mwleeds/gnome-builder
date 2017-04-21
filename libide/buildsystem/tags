@@ -1,0 +1,712 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BUILD_FAILED	ide-build-manager.c	/^  BUILD_FAILED,$/;"	e	enum:__anon7	file:
+BUILD_FINISHED	ide-build-manager.c	/^  BUILD_FINISHED,$/;"	e	enum:__anon7	file:
+BUILD_STARTED	ide-build-manager.c	/^  BUILD_STARTED,$/;"	e	enum:__anon7	file:
+CHAIN	ide-build-stage.c	/^  CHAIN,$/;"	e	enum:__anon25	file:
+CHANGED	ide-configuration.c	/^  CHANGED,$/;"	e	enum:__anon5	file:
+CHANGED	ide-environment.c	/^  CHANGED,$/;"	e	enum:__anon2	file:
+DIAGNOSTIC	ide-build-pipeline.c	/^  DIAGNOSTIC,$/;"	e	enum:__anon20	file:
+DISPATCH_MAX	ide-build-log.c	30;"	d	file:
+ENTERING_DIRECTORY_BEGIN	ide-build-pipeline.c	493;"	d	file:
+ENTERING_DIRECTORY_BEGIN	ide-build-pipeline.c	565;"	d	file:
+ENTERING_DIRECTORY_END	ide-build-pipeline.c	494;"	d	file:
+ENTERING_DIRECTORY_END	ide-build-pipeline.c	566;"	d	file:
+ErrorFormat	ide-build-pipeline.c	/^} ErrorFormat;$/;"	t	typeref:struct:__anon14	file:
+FINISHED	ide-build-pipeline.c	/^  FINISHED,$/;"	e	enum:__anon20	file:
+G_DEFINE_INTERFACE	ide-build-system.c	/^G_DEFINE_INTERFACE (IdeBuildSystem, ide_build_system, IDE_TYPE_OBJECT)$/;"	f
+G_DEFINE_TYPE	ide-environment-variable.c	/^G_DEFINE_TYPE (IdeEnvironmentVariable, ide_environment_variable, G_TYPE_OBJECT)$/;"	f
+G_DEFINE_TYPE_WITH_PRIVATE	ide-build-stage.c	/^G_DEFINE_TYPE_WITH_PRIVATE (IdeBuildStage, ide_build_stage, IDE_TYPE_OBJECT)$/;"	f
+G_DEFINE_TYPE_WITH_PRIVATE	ide-configuration.c	/^G_DEFINE_TYPE_WITH_PRIVATE (IdeConfiguration, ide_configuration, IDE_TYPE_OBJECT)$/;"	f
+G_LOG_DOMAIN	ide-build-log.c	19;"	d	file:
+G_LOG_DOMAIN	ide-build-manager.c	19;"	d	file:
+G_LOG_DOMAIN	ide-build-pipeline-addin.c	19;"	d	file:
+G_LOG_DOMAIN	ide-build-pipeline.c	19;"	d	file:
+G_LOG_DOMAIN	ide-build-stage-launcher.c	19;"	d	file:
+G_LOG_DOMAIN	ide-build-stage-mkdirs.c	19;"	d	file:
+G_LOG_DOMAIN	ide-build-stage-transfer.c	19;"	d	file:
+G_LOG_DOMAIN	ide-build-stage.c	19;"	d	file:
+G_LOG_DOMAIN	ide-build-system-discovery.c	19;"	d	file:
+G_LOG_DOMAIN	ide-build-system.c	19;"	d	file:
+G_LOG_DOMAIN	ide-build-target.c	19;"	d	file:
+G_LOG_DOMAIN	ide-configuration-manager.c	19;"	d	file:
+G_LOG_DOMAIN	ide-configuration.c	19;"	d	file:
+IDE_BUILD_LOG_H	ide-build-log.h	20;"	d
+IDE_BUILD_LOG_PRIVATE_H	ide-build-log-private.h	20;"	d
+IDE_BUILD_LOG_STDERR	ide-build-log.h	/^  IDE_BUILD_LOG_STDERR,$/;"	e	enum:__anon10
+IDE_BUILD_LOG_STDOUT	ide-build-log.h	/^  IDE_BUILD_LOG_STDOUT,$/;"	e	enum:__anon10
+IDE_BUILD_MANAGER_H	ide-build-manager.h	20;"	d
+IDE_BUILD_PHASE_AFTER	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_AFTER        = 1 << 29,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_AUTOGEN	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_AUTOGEN      = 1 << 3,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_BEFORE	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_BEFORE       = 1 << 28,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_BUILD	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_BUILD        = 1 << 6,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_CONFIGURE	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_CONFIGURE    = 1 << 4,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_DEPENDENCIES	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_DEPENDENCIES = 1 << 2,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_DOWNLOADS	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_DOWNLOADS    = 1 << 1,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_EXPORT	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_EXPORT       = 1 << 8,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_FAILED	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_FAILED       = 1 << 31,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_FINAL	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_FINAL        = 1 << 9,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_FINISHED	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_FINISHED     = 1 << 30,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_INSTALL	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_INSTALL      = 1 << 7,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_MASK	ide-build-pipeline.h	34;"	d
+IDE_BUILD_PHASE_NONE	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_NONE         = 0,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_PREPARE	ide-build-pipeline.h	/^  IDE_BUILD_PHASE_PREPARE      = 1 << 0,$/;"	e	enum:__anon23
+IDE_BUILD_PHASE_WHENCE_MASK	ide-build-pipeline.h	35;"	d
+IDE_BUILD_PIPELINE_ADDIN_H	ide-build-pipeline-addin.h	20;"	d
+IDE_BUILD_PIPELINE_H	ide-build-pipeline.h	20;"	d
+IDE_BUILD_STAGE_H	ide-build-stage.h	20;"	d
+IDE_BUILD_STAGE_LAUNCHER_H	ide-build-stage-launcher.h	20;"	d
+IDE_BUILD_STAGE_MKDIRS_H	ide-build-stage-mkdirs.h	20;"	d
+IDE_BUILD_STAGE_PRIVATE_H	ide-build-stage-private.h	20;"	d
+IDE_BUILD_STAGE_TRANSFER_H	ide-build-stage-transfer.h	20;"	d
+IDE_BUILD_SYSTEM_DISCOVERY_H	ide-build-system-discovery.h	20;"	d
+IDE_BUILD_SYSTEM_H	ide-build-system.h	20;"	d
+IDE_BUILD_TARGET_H	ide-build-target.h	20;"	d
+IDE_BUILD_UTILS_H	ide-build-utils.h	20;"	d
+IDE_CONFIGURATION_H	ide-configuration.h	20;"	d
+IDE_CONFIGURATION_MANAGER_H	ide-configuration-manager.h	20;"	d
+IDE_CONFIGURATION_PROVIDER_H	ide-configuration-provider.h	20;"	d
+IDE_ENVIRONMENT_H	ide-environment.h	20;"	d
+IDE_ENVIRONMENT_VARIABLE_H	ide-environment-variable.h	20;"	d
+IDE_TYPE_BUILD_LOG	ide-build-log-private.h	28;"	d
+IDE_TYPE_BUILD_MANAGER	ide-build-manager.h	30;"	d
+IDE_TYPE_BUILD_PIPELINE	ide-build-pipeline.h	33;"	d
+IDE_TYPE_BUILD_PIPELINE_ADDIN	ide-build-pipeline-addin.h	28;"	d
+IDE_TYPE_BUILD_STAGE	ide-build-stage.h	32;"	d
+IDE_TYPE_BUILD_STAGE_LAUNCHER	ide-build-stage-launcher.h	31;"	d
+IDE_TYPE_BUILD_STAGE_MKDIRS	ide-build-stage-mkdirs.h	26;"	d
+IDE_TYPE_BUILD_STAGE_TRANSFER	ide-build-stage-transfer.h	26;"	d
+IDE_TYPE_BUILD_SYSTEM	ide-build-system.h	28;"	d
+IDE_TYPE_BUILD_SYSTEM_DISCOVERY	ide-build-system-discovery.h	28;"	d
+IDE_TYPE_BUILD_TARGET	ide-build-target.h	28;"	d
+IDE_TYPE_CONFIGURATION	ide-configuration.h	29;"	d
+IDE_TYPE_CONFIGURATION_MANAGER	ide-configuration-manager.h	29;"	d
+IDE_TYPE_CONFIGURATION_PROVIDER	ide-configuration-provider.h	28;"	d
+IDE_TYPE_ENVIRONMENT	ide-environment.h	28;"	d
+IDE_TYPE_ENVIRONMENT_VARIABLE	ide-environment-variable.h	26;"	d
+INVALIDATE	ide-configuration-manager.c	/^  INVALIDATE,$/;"	e	enum:__anon12	file:
+IdeBuildLogObserver	ide-build-log.h	/^typedef void (*IdeBuildLogObserver) (IdeBuildLogStream  log_stream,$/;"	t
+IdeBuildLogStream	ide-build-log.h	/^} IdeBuildLogStream;$/;"	t	typeref:enum:__anon10
+IdeBuildPhase	ide-build-pipeline.h	/^} IdeBuildPhase;$/;"	t	typeref:enum:__anon23
+IdeBuildStageLauncherPrivate	ide-build-stage-launcher.c	/^} IdeBuildStageLauncherPrivate;$/;"	t	typeref:struct:__anon8	file:
+IdeBuildStageMkdirsPrivate	ide-build-stage-mkdirs.c	/^} IdeBuildStageMkdirsPrivate;$/;"	t	typeref:struct:__anon22	file:
+IdeBuildStagePrivate	ide-build-stage.c	/^} IdeBuildStagePrivate;$/;"	t	typeref:struct:__anon24	file:
+IdeConfigurationPrivate	ide-configuration.c	/^} IdeConfigurationPrivate;$/;"	t	typeref:struct:__anon4	file:
+LAST_PROP	ide-configuration-manager.c	/^  LAST_PROP$/;"	e	enum:__anon11	file:
+LAST_SIGNAL	ide-configuration.c	/^  LAST_SIGNAL$/;"	e	enum:__anon5	file:
+LAST_SIGNAL	ide-environment.c	/^  LAST_SIGNAL$/;"	e	enum:__anon2	file:
+N_PROPS	ide-build-manager.c	/^  N_PROPS$/;"	e	enum:__anon6	file:
+N_PROPS	ide-build-pipeline.c	/^  N_PROPS$/;"	e	enum:__anon19	file:
+N_PROPS	ide-build-stage-launcher.c	/^  N_PROPS$/;"	e	enum:__anon9	file:
+N_PROPS	ide-build-stage-transfer.c	/^  N_PROPS$/;"	e	enum:__anon1	file:
+N_SIGNALS	ide-build-manager.c	/^  N_SIGNALS$/;"	e	enum:__anon7	file:
+N_SIGNALS	ide-build-pipeline.c	/^  N_SIGNALS$/;"	e	enum:__anon20	file:
+N_SIGNALS	ide-build-stage.c	/^  N_SIGNALS$/;"	e	enum:__anon25	file:
+N_SIGNALS	ide-configuration-manager.c	/^  N_SIGNALS$/;"	e	enum:__anon12	file:
+Observer	ide-build-log.c	/^} Observer;$/;"	t	typeref:struct:__anon3	file:
+POINTER_MARK	ide-build-log.c	27;"	d	file:
+POINTER_MARKED	ide-build-log.c	29;"	d	file:
+POINTER_UNMARK	ide-build-log.c	28;"	d	file:
+PROP_0	ide-build-manager.c	/^  PROP_0,$/;"	e	enum:__anon6	file:
+PROP_0	ide-build-pipeline.c	/^  PROP_0,$/;"	e	enum:__anon19	file:
+PROP_0	ide-build-stage-launcher.c	/^  PROP_0,$/;"	e	enum:__anon9	file:
+PROP_0	ide-build-stage-transfer.c	/^  PROP_0,$/;"	e	enum:__anon1	file:
+PROP_0	ide-configuration-manager.c	/^  PROP_0,$/;"	e	enum:__anon11	file:
+PROP_BUSY	ide-build-manager.c	/^  PROP_BUSY,$/;"	e	enum:__anon6	file:
+PROP_BUSY	ide-build-pipeline.c	/^  PROP_BUSY,$/;"	e	enum:__anon19	file:
+PROP_CLEAN_LAUNCHER	ide-build-stage-launcher.c	/^  PROP_CLEAN_LAUNCHER,$/;"	e	enum:__anon9	file:
+PROP_CONFIGURATION	ide-build-pipeline.c	/^  PROP_CONFIGURATION,$/;"	e	enum:__anon19	file:
+PROP_CURRENT	ide-configuration-manager.c	/^  PROP_CURRENT,$/;"	e	enum:__anon11	file:
+PROP_CURRENT_DISPLAY_NAME	ide-configuration-manager.c	/^  PROP_CURRENT_DISPLAY_NAME,$/;"	e	enum:__anon11	file:
+PROP_HAS_DIAGNOSTICS	ide-build-manager.c	/^  PROP_HAS_DIAGNOSTICS,$/;"	e	enum:__anon6	file:
+PROP_IGNORE_EXIT_STATUS	ide-build-stage-launcher.c	/^  PROP_IGNORE_EXIT_STATUS,$/;"	e	enum:__anon9	file:
+PROP_LAST_BUILD_TIME	ide-build-manager.c	/^  PROP_LAST_BUILD_TIME,$/;"	e	enum:__anon6	file:
+PROP_LAUNCHER	ide-build-stage-launcher.c	/^  PROP_LAUNCHER,$/;"	e	enum:__anon9	file:
+PROP_MESSAGE	ide-build-manager.c	/^  PROP_MESSAGE,$/;"	e	enum:__anon6	file:
+PROP_MESSAGE	ide-build-pipeline.c	/^  PROP_MESSAGE,$/;"	e	enum:__anon19	file:
+PROP_PHASE	ide-build-pipeline.c	/^  PROP_PHASE,$/;"	e	enum:__anon19	file:
+PROP_PIPELINE	ide-build-manager.c	/^  PROP_PIPELINE,$/;"	e	enum:__anon6	file:
+PROP_RUNNING_TIME	ide-build-manager.c	/^  PROP_RUNNING_TIME,$/;"	e	enum:__anon6	file:
+PROP_TRANSFER	ide-build-stage-transfer.c	/^  PROP_TRANSFER,$/;"	e	enum:__anon1	file:
+Path	ide-build-stage-mkdirs.c	/^} Path;$/;"	t	typeref:struct:__anon21	file:
+PipelineEntry	ide-build-pipeline.c	/^} PipelineEntry;$/;"	t	typeref:struct:__anon13	file:
+QUERY	ide-build-stage.c	/^  QUERY,$/;"	e	enum:__anon25	file:
+REAP	ide-build-stage.c	/^  REAP,$/;"	e	enum:__anon25	file:
+STARTED	ide-build-pipeline.c	/^  STARTED,$/;"	e	enum:__anon20	file:
+TASK_BUILD	ide-build-pipeline.c	/^  TASK_BUILD   = 1,$/;"	e	enum:__anon15	file:
+TASK_CLEAN	ide-build-pipeline.c	/^  TASK_CLEAN   = 2,$/;"	e	enum:__anon15	file:
+TASK_REBUILD	ide-build-pipeline.c	/^  TASK_REBUILD = 3,$/;"	e	enum:__anon15	file:
+Tail	ide-build-stage.c	/^} Tail;$/;"	t	typeref:struct:__anon26	file:
+TaskData	ide-build-pipeline.c	/^} TaskData;$/;"	t	typeref:struct:__anon16	file:
+TaskType	ide-build-pipeline.c	/^} TaskType;$/;"	t	typeref:enum:__anon15	file:
+_IdeBuildLog	ide-build-log.c	/^struct _IdeBuildLog$/;"	s	file:
+_IdeBuildManager	ide-build-manager.c	/^struct _IdeBuildManager$/;"	s	file:
+_IdeBuildPipeline	ide-build-pipeline.c	/^struct _IdeBuildPipeline$/;"	s	file:
+_IdeBuildPipelineAddinInterface	ide-build-pipeline-addin.h	/^struct _IdeBuildPipelineAddinInterface$/;"	s
+_IdeBuildStageClass	ide-build-stage.h	/^struct _IdeBuildStageClass$/;"	s
+_IdeBuildStageLauncherClass	ide-build-stage-launcher.h	/^struct _IdeBuildStageLauncherClass$/;"	s
+_IdeBuildStageMkdirsClass	ide-build-stage-mkdirs.h	/^struct _IdeBuildStageMkdirsClass$/;"	s
+_IdeBuildStageTransfer	ide-build-stage-transfer.c	/^struct _IdeBuildStageTransfer$/;"	s	file:
+_IdeBuildSystemDiscoveryInterface	ide-build-system-discovery.h	/^struct _IdeBuildSystemDiscoveryInterface$/;"	s
+_IdeBuildSystemInterface	ide-build-system.h	/^struct _IdeBuildSystemInterface$/;"	s
+_IdeBuildTargetInterface	ide-build-target.h	/^struct _IdeBuildTargetInterface$/;"	s
+_IdeConfigurationClass	ide-configuration.h	/^struct _IdeConfigurationClass$/;"	s
+_IdeConfigurationManager	ide-configuration-manager.c	/^struct _IdeConfigurationManager$/;"	s	file:
+_IdeConfigurationProviderInterface	ide-configuration-provider.h	/^struct _IdeConfigurationProviderInterface$/;"	s
+_IdeEnvironment	ide-environment.c	/^struct _IdeEnvironment$/;"	s	file:
+_IdeEnvironmentVariable	ide-environment-variable.c	/^struct _IdeEnvironmentVariable$/;"	s	file:
+_ide_build_stage_execute_with_query_async	ide-build-stage.c	/^_ide_build_stage_execute_with_query_async (IdeBuildStage       *self,$/;"	f
+_ide_build_stage_execute_with_query_finish	ide-build-stage.c	/^_ide_build_stage_execute_with_query_finish (IdeBuildStage  *self,$/;"	f
+_ide_build_stage_has_query	ide-build-stage.c	/^_ide_build_stage_has_query (IdeBuildStage *self)$/;"	f
+_reserved1	ide-build-stage-launcher.h	/^  gpointer _reserved1;$/;"	m	struct:_IdeBuildStageLauncherClass
+_reserved1	ide-build-stage-mkdirs.h	/^  gpointer _reserved1;$/;"	m	struct:_IdeBuildStageMkdirsClass
+_reserved1	ide-build-stage.h	/^  gpointer _reserved1;$/;"	m	struct:_IdeBuildStageClass
+_reserved1	ide-configuration.h	/^  gpointer _reserved1;$/;"	m	struct:_IdeConfigurationClass
+_reserved10	ide-build-stage.h	/^  gpointer _reserved10;$/;"	m	struct:_IdeBuildStageClass
+_reserved10	ide-configuration.h	/^  gpointer _reserved10;$/;"	m	struct:_IdeConfigurationClass
+_reserved11	ide-build-stage.h	/^  gpointer _reserved11;$/;"	m	struct:_IdeBuildStageClass
+_reserved11	ide-configuration.h	/^  gpointer _reserved11;$/;"	m	struct:_IdeConfigurationClass
+_reserved12	ide-build-stage.h	/^  gpointer _reserved12;$/;"	m	struct:_IdeBuildStageClass
+_reserved12	ide-configuration.h	/^  gpointer _reserved12;$/;"	m	struct:_IdeConfigurationClass
+_reserved13	ide-configuration.h	/^  gpointer _reserved13;$/;"	m	struct:_IdeConfigurationClass
+_reserved14	ide-configuration.h	/^  gpointer _reserved14;$/;"	m	struct:_IdeConfigurationClass
+_reserved15	ide-configuration.h	/^  gpointer _reserved15;$/;"	m	struct:_IdeConfigurationClass
+_reserved16	ide-configuration.h	/^  gpointer _reserved16;$/;"	m	struct:_IdeConfigurationClass
+_reserved2	ide-build-stage-launcher.h	/^  gpointer _reserved2;$/;"	m	struct:_IdeBuildStageLauncherClass
+_reserved2	ide-build-stage-mkdirs.h	/^  gpointer _reserved2;$/;"	m	struct:_IdeBuildStageMkdirsClass
+_reserved2	ide-build-stage.h	/^  gpointer _reserved2;$/;"	m	struct:_IdeBuildStageClass
+_reserved2	ide-build-target.h	/^  gpointer _reserved2;$/;"	m	struct:_IdeBuildTargetInterface
+_reserved2	ide-configuration.h	/^  gpointer _reserved2;$/;"	m	struct:_IdeConfigurationClass
+_reserved3	ide-build-stage-launcher.h	/^  gpointer _reserved3;$/;"	m	struct:_IdeBuildStageLauncherClass
+_reserved3	ide-build-stage-mkdirs.h	/^  gpointer _reserved3;$/;"	m	struct:_IdeBuildStageMkdirsClass
+_reserved3	ide-build-stage.h	/^  gpointer _reserved3;$/;"	m	struct:_IdeBuildStageClass
+_reserved3	ide-build-target.h	/^  gpointer _reserved3;$/;"	m	struct:_IdeBuildTargetInterface
+_reserved3	ide-configuration.h	/^  gpointer _reserved3;$/;"	m	struct:_IdeConfigurationClass
+_reserved4	ide-build-stage-launcher.h	/^  gpointer _reserved4;$/;"	m	struct:_IdeBuildStageLauncherClass
+_reserved4	ide-build-stage-mkdirs.h	/^  gpointer _reserved4;$/;"	m	struct:_IdeBuildStageMkdirsClass
+_reserved4	ide-build-stage.h	/^  gpointer _reserved4;$/;"	m	struct:_IdeBuildStageClass
+_reserved4	ide-build-target.h	/^  gpointer _reserved4;$/;"	m	struct:_IdeBuildTargetInterface
+_reserved4	ide-configuration.h	/^  gpointer _reserved4;$/;"	m	struct:_IdeConfigurationClass
+_reserved5	ide-build-stage.h	/^  gpointer _reserved5;$/;"	m	struct:_IdeBuildStageClass
+_reserved5	ide-build-target.h	/^  gpointer _reserved5;$/;"	m	struct:_IdeBuildTargetInterface
+_reserved5	ide-configuration.h	/^  gpointer _reserved5;$/;"	m	struct:_IdeConfigurationClass
+_reserved6	ide-build-stage.h	/^  gpointer _reserved6;$/;"	m	struct:_IdeBuildStageClass
+_reserved6	ide-build-target.h	/^  gpointer _reserved6;$/;"	m	struct:_IdeBuildTargetInterface
+_reserved6	ide-configuration.h	/^  gpointer _reserved6;$/;"	m	struct:_IdeConfigurationClass
+_reserved7	ide-build-stage.h	/^  gpointer _reserved7;$/;"	m	struct:_IdeBuildStageClass
+_reserved7	ide-build-target.h	/^  gpointer _reserved7;$/;"	m	struct:_IdeBuildTargetInterface
+_reserved7	ide-configuration.h	/^  gpointer _reserved7;$/;"	m	struct:_IdeConfigurationClass
+_reserved8	ide-build-stage.h	/^  gpointer _reserved8;$/;"	m	struct:_IdeBuildStageClass
+_reserved8	ide-build-target.h	/^  gpointer _reserved8;$/;"	m	struct:_IdeBuildTargetInterface
+_reserved8	ide-configuration.h	/^  gpointer _reserved8;$/;"	m	struct:_IdeConfigurationClass
+_reserved9	ide-build-stage.h	/^  gpointer _reserved9;$/;"	m	struct:_IdeBuildStageClass
+_reserved9	ide-configuration.h	/^  gpointer _reserved9;$/;"	m	struct:_IdeConfigurationClass
+_value_copy	ide-configuration.c	/^_value_copy (const GValue *value)$/;"	f	file:
+_value_free	ide-configuration.c	/^_value_free (gpointer data)$/;"	f	file:
+_value_new	ide-configuration.c	/^_value_new (GType type)$/;"	f	file:
+action_group_iface_init	ide-build-manager.c	/^action_group_iface_init (GActionGroupInterface *iface)$/;"	f	file:
+actions	ide-build-manager.c	/^  GActionGroup     *actions;$/;"	m	struct:_IdeBuildManager	file:
+addins	ide-build-pipeline.c	/^  PeasExtensionSet *addins;$/;"	m	struct:_IdeBuildPipeline	file:
+app_id	ide-configuration.c	/^  gchar          *app_id;$/;"	m	struct:__anon4	file:
+async_initable_iface_init	ide-configuration-manager.c	/^async_initable_iface_init (GAsyncInitableIface *iface)$/;"	f	file:
+build_phase_nick	ide-build-pipeline.c	/^build_phase_nick (IdeBuildPhase phase)$/;"	f	file:
+builddir	ide-build-pipeline.c	/^  gchar *builddir;$/;"	m	struct:_IdeBuildPipeline	file:
+busy	ide-build-pipeline.c	/^  guint busy : 1;$/;"	m	struct:_IdeBuildPipeline	file:
+callback	ide-build-log.c	/^  IdeBuildLogObserver callback;$/;"	m	struct:__anon3	file:
+can_remove_builddir	ide-build-pipeline.c	/^can_remove_builddir (IdeBuildPipeline *self)$/;"	f	file:
+cancellable	ide-build-manager.c	/^  GCancellable     *cancellable;$/;"	m	struct:_IdeBuildManager	file:
+chain	ide-build-stage.h	/^  gboolean (*chain)          (IdeBuildStage        *self,$/;"	m	struct:_IdeBuildStageClass
+check_stdout	ide-build-stage.c	/^  guint                check_stdout : 1;$/;"	m	struct:__anon24	file:
+clean	ide-build-pipeline.c	/^    } clean;$/;"	m	union:__anon16::__anon17	typeref:struct:__anon16::__anon17::__anon18	file:
+clean_async	ide-build-stage.h	/^  void     (*clean_async)    (IdeBuildStage        *self,$/;"	m	struct:_IdeBuildStageClass
+clean_finish	ide-build-stage.h	/^  gboolean (*clean_finish)   (IdeBuildStage        *self,$/;"	m	struct:_IdeBuildStageClass
+clean_launcher	ide-build-stage-launcher.c	/^  IdeSubprocessLauncher *clean_launcher;$/;"	m	struct:__anon8	file:
+clear_error_format	ide-build-pipeline.c	/^clear_error_format (gpointer data)$/;"	f	file:
+clear_path	ide-build-stage-mkdirs.c	/^clear_path (gpointer data)$/;"	f	file:
+clear_pipeline_entry	ide-build-pipeline.c	/^clear_pipeline_entry (gpointer data)$/;"	f	file:
+completed	ide-build-stage.c	/^  guint                completed : 1;$/;"	m	struct:__anon24	file:
+config_opts	ide-configuration.c	/^  gchar          *config_opts;$/;"	m	struct:__anon4	file:
+configuration	ide-build-pipeline.c	/^  IdeConfiguration *configuration;$/;"	m	struct:_IdeBuildPipeline	file:
+configurations	ide-configuration-manager.c	/^  GPtrArray        *configurations;$/;"	m	struct:_IdeConfigurationManager	file:
+create_diagnostic	ide-build-pipeline.c	/^create_diagnostic (IdeBuildPipeline *self,$/;"	f	file:
+current	ide-configuration-manager.c	/^  IdeConfiguration *current;$/;"	m	struct:_IdeConfigurationManager	file:
+current_stage	ide-build-pipeline.c	/^  IdeBuildStage *current_stage;$/;"	m	struct:_IdeBuildPipeline	file:
+data	ide-build-log.c	/^  gpointer            data;$/;"	m	struct:__anon3	file:
+debug	ide-configuration.c	/^  guint           debug : 1;$/;"	m	struct:__anon4	file:
+destroy	ide-build-log.c	/^  GDestroyNotify      destroy;$/;"	m	struct:__anon3	file:
+device_id	ide-configuration.c	/^  gchar          *device_id;$/;"	m	struct:__anon4	file:
+device_ready	ide-configuration.c	/^  guint           device_ready : 1;$/;"	m	struct:__anon4	file:
+diagnostic_count	ide-build-manager.c	/^  guint             diagnostic_count;$/;"	m	struct:_IdeBuildManager	file:
+dirty	ide-configuration.c	/^  guint           dirty : 1;$/;"	m	struct:__anon4	file:
+disabled	ide-build-stage.c	/^  guint                disabled : 1;$/;"	m	struct:__anon24	file:
+discover	ide-build-system-discovery.h	/^  gchar *(*discover) (IdeBuildSystemDiscovery  *self,$/;"	m	struct:_IdeBuildSystemDiscoveryInterface
+display_name	ide-configuration.c	/^  gchar          *display_name;$/;"	m	struct:__anon4	file:
+emit_log_from_main	ide-build-log.c	/^emit_log_from_main (gpointer user_data)$/;"	f	file:
+environment	ide-configuration.c	/^  IdeEnvironment *environment;$/;"	m	struct:__anon4	file:
+errfmt_current_dir	ide-build-pipeline.c	/^  gchar  *errfmt_current_dir;$/;"	m	struct:_IdeBuildPipeline	file:
+errfmt_seqnum	ide-build-pipeline.c	/^  guint   errfmt_seqnum;$/;"	m	struct:_IdeBuildPipeline	file:
+errfmt_top_dir	ide-build-pipeline.c	/^  gchar  *errfmt_top_dir;$/;"	m	struct:_IdeBuildPipeline	file:
+errfmts	ide-build-pipeline.c	/^  GArray *errfmts;$/;"	m	struct:_IdeBuildPipeline	file:
+errors_on_stdout	ide-build-pipeline.c	/^  guint errors_on_stdout : 1;$/;"	m	struct:_IdeBuildPipeline	file:
+execute	ide-build-stage.h	/^  gboolean (*execute)        (IdeBuildStage        *self,$/;"	m	struct:_IdeBuildStageClass
+execute_async	ide-build-stage.h	/^  void     (*execute_async)  (IdeBuildStage        *self,$/;"	m	struct:_IdeBuildStageClass
+execute_finish	ide-build-stage.h	/^  gboolean (*execute_finish) (IdeBuildStage        *self,$/;"	m	struct:_IdeBuildStageClass
+extensions	ide-configuration-manager.c	/^  PeasExtensionSet *extensions;$/;"	m	struct:_IdeConfigurationManager	file:
+failed	ide-build-pipeline.c	/^  guint failed : 1;$/;"	m	struct:_IdeBuildPipeline	file:
+find_color_code	ide-build-utils.c	/^find_color_code (const gchar  *txt,$/;"	f	file:
+get_build_flags_async	ide-build-system.h	/^  void        (*get_build_flags_async)    (IdeBuildSystem       *self,$/;"	m	struct:_IdeBuildSystemInterface
+get_build_flags_finish	ide-build-system.h	/^  gchar     **(*get_build_flags_finish)   (IdeBuildSystem       *self,$/;"	m	struct:_IdeBuildSystemInterface
+get_build_targets_async	ide-build-system.h	/^  void        (*get_build_targets_async)  (IdeBuildSystem       *self,$/;"	m	struct:_IdeBuildSystemInterface
+get_build_targets_finish	ide-build-system.h	/^  GPtrArray  *(*get_build_targets_finish) (IdeBuildSystem       *self,$/;"	m	struct:_IdeBuildSystemInterface
+get_builddir	ide-build-system.h	/^  gchar      *(*get_builddir)             (IdeBuildSystem       *self,$/;"	m	struct:_IdeBuildSystemInterface
+get_device	ide-configuration.h	/^  IdeDevice  *(*get_device)       (IdeConfiguration *self);$/;"	m	struct:_IdeConfigurationClass
+get_id	ide-build-system.h	/^  gchar      *(*get_id)                   (IdeBuildSystem       *self);$/;"	m	struct:_IdeBuildSystemInterface
+get_install_directory	ide-build-target.h	/^  GFile *(*get_install_directory) (IdeBuildTarget *self);$/;"	m	struct:_IdeBuildTargetInterface
+get_name	ide-build-target.h	/^  gchar *(*get_name)              (IdeBuildTarget *self);$/;"	m	struct:_IdeBuildTargetInterface
+get_priority	ide-build-system.h	/^  gint        (*get_priority)             (IdeBuildSystem       *self);$/;"	m	struct:_IdeBuildSystemInterface
+get_runtime	ide-configuration.h	/^  IdeRuntime *(*get_runtime)      (IdeConfiguration *self);$/;"	m	struct:_IdeConfigurationClass
+id	ide-build-log.c	/^  guint               id;$/;"	m	struct:__anon3	file:
+id	ide-build-pipeline.c	/^  guint          id;$/;"	m	struct:__anon13	file:
+id	ide-build-pipeline.c	/^  guint   id;$/;"	m	struct:__anon14	file:
+id	ide-configuration.c	/^  gchar          *id;$/;"	m	struct:__anon4	file:
+ide_build_log_add_observer	ide-build-log.c	/^ide_build_log_add_observer (IdeBuildLog         *self,$/;"	f
+ide_build_log_class_init	ide-build-log.c	/^ide_build_log_class_init (IdeBuildLogClass *klass)$/;"	f	file:
+ide_build_log_finalize	ide-build-log.c	/^ide_build_log_finalize (GObject *object)$/;"	f	file:
+ide_build_log_init	ide-build-log.c	/^ide_build_log_init (IdeBuildLog *self)$/;"	f	file:
+ide_build_log_new	ide-build-log.c	/^ide_build_log_new (void)$/;"	f
+ide_build_log_observer	ide-build-log.c	/^ide_build_log_observer (IdeBuildLogStream  stream,$/;"	f
+ide_build_log_remove_observer	ide-build-log.c	/^ide_build_log_remove_observer (IdeBuildLog *self,$/;"	f
+ide_build_log_via_main	ide-build-log.c	/^ide_build_log_via_main (IdeBuildLog       *self,$/;"	f	file:
+ide_build_manager_action_build	ide-build-manager.c	/^ide_build_manager_action_build (GSimpleAction *action,$/;"	f	file:
+ide_build_manager_action_cancel	ide-build-manager.c	/^ide_build_manager_action_cancel (GSimpleAction *action,$/;"	f	file:
+ide_build_manager_action_clean	ide-build-manager.c	/^ide_build_manager_action_clean (GSimpleAction *action,$/;"	f	file:
+ide_build_manager_action_rebuild	ide-build-manager.c	/^ide_build_manager_action_rebuild (GSimpleAction *action,$/;"	f	file:
+ide_build_manager_activate_action	ide-build-manager.c	/^ide_build_manager_activate_action (GActionGroup *action_group,$/;"	f	file:
+ide_build_manager_cancel	ide-build-manager.c	/^ide_build_manager_cancel (IdeBuildManager *self)$/;"	f
+ide_build_manager_change_action_state	ide-build-manager.c	/^ide_build_manager_change_action_state (GActionGroup *action_group,$/;"	f	file:
+ide_build_manager_class_init	ide-build-manager.c	/^ide_build_manager_class_init (IdeBuildManagerClass *klass)$/;"	f	file:
+ide_build_manager_clean_async	ide-build-manager.c	/^ide_build_manager_clean_async (IdeBuildManager     *self,$/;"	f
+ide_build_manager_clean_cb	ide-build-manager.c	/^ide_build_manager_clean_cb (GObject      *object,$/;"	f	file:
+ide_build_manager_clean_finish	ide-build-manager.c	/^ide_build_manager_clean_finish (IdeBuildManager  *self,$/;"	f
+ide_build_manager_ensure_runtime_cb	ide-build-manager.c	/^ide_build_manager_ensure_runtime_cb (GObject      *object,$/;"	f	file:
+ide_build_manager_execute_async	ide-build-manager.c	/^ide_build_manager_execute_async (IdeBuildManager     *self,$/;"	f
+ide_build_manager_execute_cb	ide-build-manager.c	/^ide_build_manager_execute_cb (GObject      *object,$/;"	f	file:
+ide_build_manager_execute_finish	ide-build-manager.c	/^ide_build_manager_execute_finish (IdeBuildManager  *self,$/;"	f
+ide_build_manager_finalize	ide-build-manager.c	/^ide_build_manager_finalize (GObject *object)$/;"	f	file:
+ide_build_manager_get_busy	ide-build-manager.c	/^ide_build_manager_get_busy (IdeBuildManager *self)$/;"	f
+ide_build_manager_get_last_build_time	ide-build-manager.c	/^ide_build_manager_get_last_build_time (IdeBuildManager *self)$/;"	f
+ide_build_manager_get_message	ide-build-manager.c	/^ide_build_manager_get_message (IdeBuildManager *self)$/;"	f
+ide_build_manager_get_pipeline	ide-build-manager.c	/^ide_build_manager_get_pipeline (IdeBuildManager *self)$/;"	f
+ide_build_manager_get_property	ide-build-manager.c	/^ide_build_manager_get_property (GObject    *object,$/;"	f	file:
+ide_build_manager_get_running_time	ide-build-manager.c	/^ide_build_manager_get_running_time (IdeBuildManager *self)$/;"	f
+ide_build_manager_handle_diagnostic	ide-build-manager.c	/^ide_build_manager_handle_diagnostic (IdeBuildManager  *self,$/;"	f	file:
+ide_build_manager_init	ide-build-manager.c	/^ide_build_manager_init (IdeBuildManager *self)$/;"	f	file:
+ide_build_manager_invalidate_pipeline	ide-build-manager.c	/^ide_build_manager_invalidate_pipeline (IdeBuildManager *self)$/;"	f	file:
+ide_build_manager_list_actions	ide-build-manager.c	/^ide_build_manager_list_actions (GActionGroup *action_group)$/;"	f	file:
+ide_build_manager_notify_busy	ide-build-manager.c	/^ide_build_manager_notify_busy (IdeBuildManager  *self,$/;"	f	file:
+ide_build_manager_notify_message	ide-build-manager.c	/^ide_build_manager_notify_message (IdeBuildManager  *self,$/;"	f	file:
+ide_build_manager_pipeline_finished	ide-build-manager.c	/^ide_build_manager_pipeline_finished (IdeBuildManager  *self,$/;"	f	file:
+ide_build_manager_pipeline_started	ide-build-manager.c	/^ide_build_manager_pipeline_started (IdeBuildManager  *self,$/;"	f	file:
+ide_build_manager_propagate_busy	ide-build-manager.c	/^ide_build_manager_propagate_busy (IdeBuildManager *self)$/;"	f	file:
+ide_build_manager_query_action	ide-build-manager.c	/^ide_build_manager_query_action (GActionGroup        *action_group,$/;"	f	file:
+ide_build_manager_real_build_failed	ide-build-manager.c	/^ide_build_manager_real_build_failed (IdeBuildManager  *self,$/;"	f	file:
+ide_build_manager_real_build_finished	ide-build-manager.c	/^ide_build_manager_real_build_finished (IdeBuildManager  *self,$/;"	f	file:
+ide_build_manager_real_build_started	ide-build-manager.c	/^ide_build_manager_real_build_started (IdeBuildManager  *self,$/;"	f	file:
+ide_build_manager_rebuild_async	ide-build-manager.c	/^ide_build_manager_rebuild_async (IdeBuildManager     *self,$/;"	f
+ide_build_manager_rebuild_cb	ide-build-manager.c	/^ide_build_manager_rebuild_cb (GObject      *object,$/;"	f	file:
+ide_build_manager_rebuild_finish	ide-build-manager.c	/^ide_build_manager_rebuild_finish (IdeBuildManager  *self,$/;"	f
+ide_build_manager_save_all_cb	ide-build-manager.c	/^ide_build_manager_save_all_cb (GObject      *object,$/;"	f	file:
+ide_build_manager_start_timer	ide-build-manager.c	/^ide_build_manager_start_timer (IdeBuildManager *self)$/;"	f	file:
+ide_build_manager_stop_timer	ide-build-manager.c	/^ide_build_manager_stop_timer (IdeBuildManager *self)$/;"	f	file:
+ide_build_pipeline_add_error_format	ide-build-pipeline.c	/^ide_build_pipeline_add_error_format (IdeBuildPipeline   *self,$/;"	f
+ide_build_pipeline_add_log_observer	ide-build-pipeline.c	/^ide_build_pipeline_add_log_observer (IdeBuildPipeline    *self,$/;"	f
+ide_build_pipeline_addin_default_init	ide-build-pipeline-addin.c	/^ide_build_pipeline_addin_default_init (IdeBuildPipelineAddinInterface *iface)$/;"	f	file:
+ide_build_pipeline_addin_load	ide-build-pipeline-addin.c	/^ide_build_pipeline_addin_load (IdeBuildPipelineAddin *self,$/;"	f
+ide_build_pipeline_addin_track	ide-build-pipeline-addin.c	/^ide_build_pipeline_addin_track (IdeBuildPipelineAddin *self,$/;"	f
+ide_build_pipeline_addin_unload	ide-build-pipeline-addin.c	/^ide_build_pipeline_addin_unload (IdeBuildPipelineAddin *self,$/;"	f
+ide_build_pipeline_build_builddir_path	ide-build-pipeline.c	/^ide_build_pipeline_build_builddir_path (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_build_path_va_list	ide-build-pipeline.c	/^ide_build_pipeline_build_path_va_list (const gchar *prefix,$/;"	f	file:
+ide_build_pipeline_build_srcdir_path	ide-build-pipeline.c	/^ide_build_pipeline_build_srcdir_path (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_class_init	ide-build-pipeline.c	/^ide_build_pipeline_class_init (IdeBuildPipelineClass *klass)$/;"	f	file:
+ide_build_pipeline_clean_async	ide-build-pipeline.c	/^ide_build_pipeline_clean_async (IdeBuildPipeline    *self,$/;"	f
+ide_build_pipeline_clean_cb	ide-build-pipeline.c	/^ide_build_pipeline_clean_cb (GObject      *object,$/;"	f	file:
+ide_build_pipeline_clean_finish	ide-build-pipeline.c	/^ide_build_pipeline_clean_finish (IdeBuildPipeline  *self,$/;"	f
+ide_build_pipeline_connect	ide-build-pipeline.c	/^ide_build_pipeline_connect (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_connect_launcher	ide-build-pipeline.c	/^ide_build_pipeline_connect_launcher (IdeBuildPipeline      *self,$/;"	f
+ide_build_pipeline_constructed	ide-build-pipeline.c	/^ide_build_pipeline_constructed (GObject *object)$/;"	f	file:
+ide_build_pipeline_create_launcher	ide-build-pipeline.c	/^ide_build_pipeline_create_launcher (IdeBuildPipeline  *self,$/;"	f
+ide_build_pipeline_disconnect	ide-build-pipeline.c	/^ide_build_pipeline_disconnect (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_dispose	ide-build-pipeline.c	/^ide_build_pipeline_dispose (GObject *object)$/;"	f	file:
+ide_build_pipeline_do_flush	ide-build-pipeline.c	/^ide_build_pipeline_do_flush (gpointer data)$/;"	f	file:
+ide_build_pipeline_emit_diagnostic	ide-build-pipeline.c	/^ide_build_pipeline_emit_diagnostic (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_execute_async	ide-build-pipeline.c	/^ide_build_pipeline_execute_async (IdeBuildPipeline    *self,$/;"	f
+ide_build_pipeline_execute_finish	ide-build-pipeline.c	/^ide_build_pipeline_execute_finish (IdeBuildPipeline  *self,$/;"	f
+ide_build_pipeline_extension_added	ide-build-pipeline.c	/^ide_build_pipeline_extension_added (PeasExtensionSet *set,$/;"	f	file:
+ide_build_pipeline_extension_removed	ide-build-pipeline.c	/^ide_build_pipeline_extension_removed (PeasExtensionSet *set,$/;"	f	file:
+ide_build_pipeline_finalize	ide-build-pipeline.c	/^ide_build_pipeline_finalize (GObject *object)$/;"	f	file:
+ide_build_pipeline_foreach_stage	ide-build-pipeline.c	/^ide_build_pipeline_foreach_stage (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_get_builddir	ide-build-pipeline.c	/^ide_build_pipeline_get_builddir (IdeBuildPipeline *self)$/;"	f
+ide_build_pipeline_get_busy	ide-build-pipeline.c	/^ide_build_pipeline_get_busy (IdeBuildPipeline *self)$/;"	f
+ide_build_pipeline_get_configuration	ide-build-pipeline.c	/^ide_build_pipeline_get_configuration (IdeBuildPipeline *self)$/;"	f
+ide_build_pipeline_get_message	ide-build-pipeline.c	/^ide_build_pipeline_get_message (IdeBuildPipeline *self)$/;"	f
+ide_build_pipeline_get_phase	ide-build-pipeline.c	/^ide_build_pipeline_get_phase (IdeBuildPipeline *self)$/;"	f
+ide_build_pipeline_get_property	ide-build-pipeline.c	/^ide_build_pipeline_get_property (GObject    *object,$/;"	f	file:
+ide_build_pipeline_get_srcdir	ide-build-pipeline.c	/^ide_build_pipeline_get_srcdir (IdeBuildPipeline *self)$/;"	f
+ide_build_pipeline_get_stage_by_id	ide-build-pipeline.c	/^ide_build_pipeline_get_stage_by_id (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_init	ide-build-pipeline.c	/^ide_build_pipeline_init (IdeBuildPipeline *self)$/;"	f	file:
+ide_build_pipeline_initable_init	ide-build-pipeline.c	/^ide_build_pipeline_initable_init (GInitable     *initable,$/;"	f	file:
+ide_build_pipeline_invalidate_phase	ide-build-pipeline.c	/^ide_build_pipeline_invalidate_phase (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_load	ide-build-pipeline.c	/^ide_build_pipeline_load (IdeBuildPipeline *self)$/;"	f	file:
+ide_build_pipeline_log_observer	ide-build-pipeline.c	/^ide_build_pipeline_log_observer (IdeBuildLogStream  stream,$/;"	f	file:
+ide_build_pipeline_notify_ready	ide-build-pipeline.c	/^ide_build_pipeline_notify_ready (IdeBuildPipeline *self,$/;"	f	file:
+ide_build_pipeline_queue_flush	ide-build-pipeline.c	/^ide_build_pipeline_queue_flush (IdeBuildPipeline *self)$/;"	f	file:
+ide_build_pipeline_real_finished	ide-build-pipeline.c	/^ide_build_pipeline_real_finished (IdeBuildPipeline *self,$/;"	f	file:
+ide_build_pipeline_real_started	ide-build-pipeline.c	/^ide_build_pipeline_real_started (IdeBuildPipeline *self)$/;"	f	file:
+ide_build_pipeline_reaper_cb	ide-build-pipeline.c	/^ide_build_pipeline_reaper_cb (GObject      *object,$/;"	f	file:
+ide_build_pipeline_rebuild_async	ide-build-pipeline.c	/^ide_build_pipeline_rebuild_async (IdeBuildPipeline    *self,$/;"	f
+ide_build_pipeline_rebuild_finish	ide-build-pipeline.c	/^ide_build_pipeline_rebuild_finish (IdeBuildPipeline  *self,$/;"	f
+ide_build_pipeline_release_transients	ide-build-pipeline.c	/^ide_build_pipeline_release_transients (IdeBuildPipeline *self)$/;"	f	file:
+ide_build_pipeline_remove_error_format	ide-build-pipeline.c	/^ide_build_pipeline_remove_error_format (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_remove_log_observer	ide-build-pipeline.c	/^ide_build_pipeline_remove_log_observer (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_request_phase	ide-build-pipeline.c	/^ide_build_pipeline_request_phase (IdeBuildPipeline *self,$/;"	f
+ide_build_pipeline_set_property	ide-build-pipeline.c	/^ide_build_pipeline_set_property (GObject      *object,$/;"	f	file:
+ide_build_pipeline_stage_execute_cb	ide-build-pipeline.c	/^ide_build_pipeline_stage_execute_cb (GObject      *object,$/;"	f	file:
+ide_build_pipeline_task_notify_completed	ide-build-pipeline.c	/^ide_build_pipeline_task_notify_completed (IdeBuildPipeline *self,$/;"	f	file:
+ide_build_pipeline_tick_clean	ide-build-pipeline.c	/^ide_build_pipeline_tick_clean (IdeBuildPipeline *self,$/;"	f	file:
+ide_build_pipeline_tick_execute	ide-build-pipeline.c	/^ide_build_pipeline_tick_execute (IdeBuildPipeline *self,$/;"	f	file:
+ide_build_pipeline_tick_rebuild	ide-build-pipeline.c	/^ide_build_pipeline_tick_rebuild (IdeBuildPipeline *self,$/;"	f	file:
+ide_build_pipeline_try_chain	ide-build-pipeline.c	/^ide_build_pipeline_try_chain (IdeBuildPipeline *self,$/;"	f	file:
+ide_build_pipeline_unload	ide-build-pipeline.c	/^ide_build_pipeline_unload (IdeBuildPipeline *self)$/;"	f	file:
+ide_build_stage_chain	ide-build-stage.c	/^ide_build_stage_chain (IdeBuildStage *self,$/;"	f
+ide_build_stage_class_init	ide-build-stage.c	/^ide_build_stage_class_init (IdeBuildStageClass *klass)$/;"	f	file:
+ide_build_stage_clean_async	ide-build-stage.c	/^ide_build_stage_clean_async (IdeBuildStage       *self,$/;"	f
+ide_build_stage_clean_finish	ide-build-stage.c	/^ide_build_stage_clean_finish (IdeBuildStage  *self,$/;"	f
+ide_build_stage_clear_observer	ide-build-stage.c	/^ide_build_stage_clear_observer (IdeBuildStage *self)$/;"	f	file:
+ide_build_stage_emit_reap	ide-build-stage.c	/^ide_build_stage_emit_reap (IdeBuildStage      *self,$/;"	f
+ide_build_stage_execute_async	ide-build-stage.c	/^ide_build_stage_execute_async (IdeBuildStage       *self,$/;"	f
+ide_build_stage_execute_finish	ide-build-stage.c	/^ide_build_stage_execute_finish (IdeBuildStage  *self,$/;"	f
+ide_build_stage_finalize	ide-build-stage.c	/^ide_build_stage_finalize (GObject *object)$/;"	f	file:
+ide_build_stage_get_check_stdout	ide-build-stage.c	/^ide_build_stage_get_check_stdout (IdeBuildStage *self)$/;"	f
+ide_build_stage_get_completed	ide-build-stage.c	/^ide_build_stage_get_completed (IdeBuildStage *self)$/;"	f
+ide_build_stage_get_disabled	ide-build-stage.c	/^ide_build_stage_get_disabled (IdeBuildStage *self)$/;"	f
+ide_build_stage_get_name	ide-build-stage.c	/^ide_build_stage_get_name (IdeBuildStage *self)$/;"	f
+ide_build_stage_get_property	ide-build-stage.c	/^ide_build_stage_get_property (GObject    *object,$/;"	f	file:
+ide_build_stage_get_stdout_path	ide-build-stage.c	/^ide_build_stage_get_stdout_path (IdeBuildStage *self)$/;"	f
+ide_build_stage_get_transient	ide-build-stage.c	/^ide_build_stage_get_transient (IdeBuildStage *self)$/;"	f
+ide_build_stage_init	ide-build-stage.c	/^ide_build_stage_init (IdeBuildStage *self)$/;"	f	file:
+ide_build_stage_launcher_class_init	ide-build-stage-launcher.c	/^ide_build_stage_launcher_class_init (IdeBuildStageLauncherClass *klass)$/;"	f	file:
+ide_build_stage_launcher_clean_async	ide-build-stage-launcher.c	/^ide_build_stage_launcher_clean_async (IdeBuildStage       *stage,$/;"	f	file:
+ide_build_stage_launcher_clean_finish	ide-build-stage-launcher.c	/^ide_build_stage_launcher_clean_finish (IdeBuildStage  *stage,$/;"	f	file:
+ide_build_stage_launcher_execute_async	ide-build-stage-launcher.c	/^ide_build_stage_launcher_execute_async (IdeBuildStage       *stage,$/;"	f	file:
+ide_build_stage_launcher_execute_finish	ide-build-stage-launcher.c	/^ide_build_stage_launcher_execute_finish (IdeBuildStage  *stage,$/;"	f	file:
+ide_build_stage_launcher_finalize	ide-build-stage-launcher.c	/^ide_build_stage_launcher_finalize (GObject *object)$/;"	f	file:
+ide_build_stage_launcher_get_clean_launcher	ide-build-stage-launcher.c	/^ide_build_stage_launcher_get_clean_launcher (IdeBuildStageLauncher *self)$/;"	f
+ide_build_stage_launcher_get_ignore_exit_status	ide-build-stage-launcher.c	/^ide_build_stage_launcher_get_ignore_exit_status (IdeBuildStageLauncher *self)$/;"	f
+ide_build_stage_launcher_get_launcher	ide-build-stage-launcher.c	/^ide_build_stage_launcher_get_launcher (IdeBuildStageLauncher *self)$/;"	f
+ide_build_stage_launcher_get_property	ide-build-stage-launcher.c	/^ide_build_stage_launcher_get_property (GObject    *object,$/;"	f	file:
+ide_build_stage_launcher_init	ide-build-stage-launcher.c	/^ide_build_stage_launcher_init (IdeBuildStageLauncher *self)$/;"	f	file:
+ide_build_stage_launcher_new	ide-build-stage-launcher.c	/^ide_build_stage_launcher_new (IdeContext            *context,$/;"	f
+ide_build_stage_launcher_run	ide-build-stage-launcher.c	/^ide_build_stage_launcher_run (IdeBuildStage         *stage,$/;"	f	file:
+ide_build_stage_launcher_set_clean_launcher	ide-build-stage-launcher.c	/^ide_build_stage_launcher_set_clean_launcher (IdeBuildStageLauncher *self,$/;"	f
+ide_build_stage_launcher_set_ignore_exit_status	ide-build-stage-launcher.c	/^ide_build_stage_launcher_set_ignore_exit_status (IdeBuildStageLauncher *self,$/;"	f
+ide_build_stage_launcher_set_launcher	ide-build-stage-launcher.c	/^ide_build_stage_launcher_set_launcher (IdeBuildStageLauncher *self,$/;"	f
+ide_build_stage_launcher_set_property	ide-build-stage-launcher.c	/^ide_build_stage_launcher_set_property (GObject      *object,$/;"	f	file:
+ide_build_stage_launcher_wait_cb	ide-build-stage-launcher.c	/^ide_build_stage_launcher_wait_cb (GObject      *object,$/;"	f	file:
+ide_build_stage_log	ide-build-stage.c	/^ide_build_stage_log (IdeBuildStage     *self,$/;"	f
+ide_build_stage_log_internal	ide-build-stage.c	/^ide_build_stage_log_internal (IdeBuildStage     *self,$/;"	f	file:
+ide_build_stage_log_subprocess	ide-build-stage.c	/^ide_build_stage_log_subprocess (IdeBuildStage *self,$/;"	f
+ide_build_stage_mkdirs_add_path	ide-build-stage-mkdirs.c	/^ide_build_stage_mkdirs_add_path (IdeBuildStageMkdirs *self,$/;"	f
+ide_build_stage_mkdirs_class_init	ide-build-stage-mkdirs.c	/^ide_build_stage_mkdirs_class_init (IdeBuildStageMkdirsClass *klass)$/;"	f	file:
+ide_build_stage_mkdirs_execute	ide-build-stage-mkdirs.c	/^ide_build_stage_mkdirs_execute (IdeBuildStage     *stage,$/;"	f	file:
+ide_build_stage_mkdirs_finalize	ide-build-stage-mkdirs.c	/^ide_build_stage_mkdirs_finalize (GObject *object)$/;"	f	file:
+ide_build_stage_mkdirs_init	ide-build-stage-mkdirs.c	/^ide_build_stage_mkdirs_init (IdeBuildStageMkdirs *self)$/;"	f	file:
+ide_build_stage_mkdirs_new	ide-build-stage-mkdirs.c	/^ide_build_stage_mkdirs_new (IdeContext *context)$/;"	f
+ide_build_stage_mkdirs_query	ide-build-stage-mkdirs.c	/^ide_build_stage_mkdirs_query (IdeBuildStage    *stage,$/;"	f	file:
+ide_build_stage_observe_stream	ide-build-stage.c	/^ide_build_stage_observe_stream (IdeBuildStage     *self,$/;"	f	file:
+ide_build_stage_observe_stream_cb	ide-build-stage.c	/^ide_build_stage_observe_stream_cb (GObject      *object,$/;"	f	file:
+ide_build_stage_pause	ide-build-stage.c	/^ide_build_stage_pause (IdeBuildStage *self)$/;"	f
+ide_build_stage_real_chain	ide-build-stage.c	/^ide_build_stage_real_chain (IdeBuildStage *self,$/;"	f	file:
+ide_build_stage_real_clean_async	ide-build-stage.c	/^ide_build_stage_real_clean_async (IdeBuildStage       *self,$/;"	f	file:
+ide_build_stage_real_clean_finish	ide-build-stage.c	/^ide_build_stage_real_clean_finish (IdeBuildStage  *self,$/;"	f	file:
+ide_build_stage_real_execute	ide-build-stage.c	/^ide_build_stage_real_execute (IdeBuildStage     *self,$/;"	f	file:
+ide_build_stage_real_execute_async	ide-build-stage.c	/^ide_build_stage_real_execute_async (IdeBuildStage       *self,$/;"	f	file:
+ide_build_stage_real_execute_finish	ide-build-stage.c	/^ide_build_stage_real_execute_finish (IdeBuildStage  *self,$/;"	f	file:
+ide_build_stage_real_execute_worker	ide-build-stage.c	/^ide_build_stage_real_execute_worker (GTask        *task,$/;"	f	file:
+ide_build_stage_set_check_stdout	ide-build-stage.c	/^ide_build_stage_set_check_stdout (IdeBuildStage *self,$/;"	f
+ide_build_stage_set_completed	ide-build-stage.c	/^ide_build_stage_set_completed (IdeBuildStage *self,$/;"	f
+ide_build_stage_set_disabled	ide-build-stage.c	/^ide_build_stage_set_disabled (IdeBuildStage *self,$/;"	f
+ide_build_stage_set_log_observer	ide-build-stage.c	/^ide_build_stage_set_log_observer (IdeBuildStage       *self,$/;"	f
+ide_build_stage_set_name	ide-build-stage.c	/^ide_build_stage_set_name (IdeBuildStage *self,$/;"	f
+ide_build_stage_set_property	ide-build-stage.c	/^ide_build_stage_set_property (GObject      *object,$/;"	f	file:
+ide_build_stage_set_stdout_path	ide-build-stage.c	/^ide_build_stage_set_stdout_path (IdeBuildStage *self,$/;"	f
+ide_build_stage_set_transient	ide-build-stage.c	/^ide_build_stage_set_transient (IdeBuildStage *self,$/;"	f
+ide_build_stage_transfer_class_init	ide-build-stage-transfer.c	/^ide_build_stage_transfer_class_init (IdeBuildStageTransferClass *klass)$/;"	f	file:
+ide_build_stage_transfer_execute_async	ide-build-stage-transfer.c	/^ide_build_stage_transfer_execute_async (IdeBuildStage       *stage,$/;"	f	file:
+ide_build_stage_transfer_execute_cb	ide-build-stage-transfer.c	/^ide_build_stage_transfer_execute_cb (GObject      *object,$/;"	f	file:
+ide_build_stage_transfer_execute_finish	ide-build-stage-transfer.c	/^ide_build_stage_transfer_execute_finish (IdeBuildStage  *stage,$/;"	f	file:
+ide_build_stage_transfer_finalize	ide-build-stage-transfer.c	/^ide_build_stage_transfer_finalize (GObject *object)$/;"	f	file:
+ide_build_stage_transfer_get_property	ide-build-stage-transfer.c	/^ide_build_stage_transfer_get_property (GObject    *object,$/;"	f	file:
+ide_build_stage_transfer_init	ide-build-stage-transfer.c	/^ide_build_stage_transfer_init (IdeBuildStageTransfer *self)$/;"	f	file:
+ide_build_stage_transfer_set_property	ide-build-stage-transfer.c	/^ide_build_stage_transfer_set_property (GObject      *object,$/;"	f	file:
+ide_build_stage_unpause	ide-build-stage.c	/^ide_build_stage_unpause (IdeBuildStage *self)$/;"	f
+ide_build_stage_unpause_execute_cb	ide-build-stage.c	/^ide_build_stage_unpause_execute_cb (GObject      *object,$/;"	f	file:
+ide_build_system_default_init	ide-build-system.c	/^ide_build_system_default_init (IdeBuildSystemInterface *iface)$/;"	f	file:
+ide_build_system_discovery_default_init	ide-build-system-discovery.c	/^ide_build_system_discovery_default_init (IdeBuildSystemDiscoveryInterface *iface)$/;"	f	file:
+ide_build_system_discovery_discover	ide-build-system-discovery.c	/^ide_build_system_discovery_discover (IdeBuildSystemDiscovery  *self,$/;"	f
+ide_build_system_get_build_flags_async	ide-build-system.c	/^ide_build_system_get_build_flags_async (IdeBuildSystem      *self,$/;"	f
+ide_build_system_get_build_flags_finish	ide-build-system.c	/^ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,$/;"	f
+ide_build_system_get_build_targets_async	ide-build-system.c	/^ide_build_system_get_build_targets_async (IdeBuildSystem      *self,$/;"	f
+ide_build_system_get_build_targets_finish	ide-build-system.c	/^ide_build_system_get_build_targets_finish (IdeBuildSystem  *self,$/;"	f
+ide_build_system_get_builddir	ide-build-system.c	/^ide_build_system_get_builddir (IdeBuildSystem   *self,$/;"	f
+ide_build_system_get_id	ide-build-system.c	/^ide_build_system_get_id (IdeBuildSystem *self)$/;"	f
+ide_build_system_get_priority	ide-build-system.c	/^ide_build_system_get_priority (IdeBuildSystem *self)$/;"	f
+ide_build_system_new_async	ide-build-system.c	/^ide_build_system_new_async (IdeContext          *context,$/;"	f
+ide_build_system_new_finish	ide-build-system.c	/^ide_build_system_new_finish (GAsyncResult  *result,$/;"	f
+ide_build_system_real_get_build_flags_async	ide-build-system.c	/^ide_build_system_real_get_build_flags_async (IdeBuildSystem      *self,$/;"	f	file:
+ide_build_system_real_get_build_flags_finish	ide-build-system.c	/^ide_build_system_real_get_build_flags_finish (IdeBuildSystem  *self,$/;"	f	file:
+ide_build_system_real_get_build_targets_async	ide-build-system.c	/^ide_build_system_real_get_build_targets_async (IdeBuildSystem      *self,$/;"	f	file:
+ide_build_system_real_get_build_targets_finish	ide-build-system.c	/^ide_build_system_real_get_build_targets_finish (IdeBuildSystem  *self,$/;"	f	file:
+ide_build_target_default_init	ide-build-target.c	/^ide_build_target_default_init (IdeBuildTargetInterface *iface)$/;"	f	file:
+ide_build_target_get_install_directory	ide-build-target.c	/^ide_build_target_get_install_directory (IdeBuildTarget *self)$/;"	f
+ide_build_target_get_name	ide-build-target.c	/^ide_build_target_get_name (IdeBuildTarget *self)$/;"	f
+ide_build_utils_color_codes_filtering	ide-build-utils.c	/^ide_build_utils_color_codes_filtering (const gchar *txt)$/;"	f
+ide_configuration_class_init	ide-configuration.c	/^ide_configuration_class_init (IdeConfigurationClass *klass)$/;"	f	file:
+ide_configuration_constructed	ide-configuration.c	/^ide_configuration_constructed (GObject *object)$/;"	f	file:
+ide_configuration_device_manager_items_changed	ide-configuration.c	/^ide_configuration_device_manager_items_changed (IdeConfiguration *self,$/;"	f	file:
+ide_configuration_duplicate	ide-configuration.c	/^ide_configuration_duplicate (IdeConfiguration *self)$/;"	f
+ide_configuration_emit_changed	ide-configuration.c	/^ide_configuration_emit_changed (IdeConfiguration *self)$/;"	f	file:
+ide_configuration_environment_changed	ide-configuration.c	/^ide_configuration_environment_changed (IdeConfiguration *self,$/;"	f	file:
+ide_configuration_finalize	ide-configuration.c	/^ide_configuration_finalize (GObject *object)$/;"	f	file:
+ide_configuration_get_app_id	ide-configuration.c	/^ide_configuration_get_app_id (IdeConfiguration *self)$/;"	f
+ide_configuration_get_config_opts	ide-configuration.c	/^ide_configuration_get_config_opts (IdeConfiguration *self)$/;"	f
+ide_configuration_get_debug	ide-configuration.c	/^ide_configuration_get_debug (IdeConfiguration *self)$/;"	f
+ide_configuration_get_device	ide-configuration.c	/^ide_configuration_get_device (IdeConfiguration *self)$/;"	f
+ide_configuration_get_device_id	ide-configuration.c	/^ide_configuration_get_device_id (IdeConfiguration *self)$/;"	f
+ide_configuration_get_dirty	ide-configuration.c	/^ide_configuration_get_dirty (IdeConfiguration *self)$/;"	f
+ide_configuration_get_display_name	ide-configuration.c	/^ide_configuration_get_display_name (IdeConfiguration *self)$/;"	f
+ide_configuration_get_environ	ide-configuration.c	/^ide_configuration_get_environ (IdeConfiguration *self)$/;"	f
+ide_configuration_get_environment	ide-configuration.c	/^ide_configuration_get_environment (IdeConfiguration *self)$/;"	f
+ide_configuration_get_id	ide-configuration.c	/^ide_configuration_get_id (IdeConfiguration *self)$/;"	f
+ide_configuration_get_internal_boolean	ide-configuration.c	/^ide_configuration_get_internal_boolean (IdeConfiguration *self,$/;"	f
+ide_configuration_get_internal_int	ide-configuration.c	/^ide_configuration_get_internal_int (IdeConfiguration *self,$/;"	f
+ide_configuration_get_internal_int64	ide-configuration.c	/^ide_configuration_get_internal_int64 (IdeConfiguration *self,$/;"	f
+ide_configuration_get_internal_object	ide-configuration.c	/^ide_configuration_get_internal_object (IdeConfiguration *self,$/;"	f
+ide_configuration_get_internal_string	ide-configuration.c	/^ide_configuration_get_internal_string (IdeConfiguration *self,$/;"	f
+ide_configuration_get_internal_strv	ide-configuration.c	/^ide_configuration_get_internal_strv (IdeConfiguration *self,$/;"	f
+ide_configuration_get_parallelism	ide-configuration.c	/^ide_configuration_get_parallelism (IdeConfiguration *self)$/;"	f
+ide_configuration_get_prefix	ide-configuration.c	/^ide_configuration_get_prefix (IdeConfiguration *self)$/;"	f
+ide_configuration_get_property	ide-configuration.c	/^ide_configuration_get_property (GObject    *object,$/;"	f	file:
+ide_configuration_get_ready	ide-configuration.c	/^ide_configuration_get_ready (IdeConfiguration *self)$/;"	f
+ide_configuration_get_runtime	ide-configuration.c	/^ide_configuration_get_runtime (IdeConfiguration *self)$/;"	f
+ide_configuration_get_runtime_id	ide-configuration.c	/^ide_configuration_get_runtime_id (IdeConfiguration *self)$/;"	f
+ide_configuration_get_sequence	ide-configuration.c	/^ide_configuration_get_sequence (IdeConfiguration *self)$/;"	f
+ide_configuration_getenv	ide-configuration.c	/^ide_configuration_getenv (IdeConfiguration *self,$/;"	f
+ide_configuration_init	ide-configuration.c	/^ide_configuration_init (IdeConfiguration *self)$/;"	f	file:
+ide_configuration_manager_add	ide-configuration-manager.c	/^ide_configuration_manager_add (IdeConfigurationManager *self,$/;"	f
+ide_configuration_manager_add_default	ide-configuration-manager.c	/^ide_configuration_manager_add_default (IdeConfigurationManager *self)$/;"	f	file:
+ide_configuration_manager_changed	ide-configuration-manager.c	/^ide_configuration_manager_changed (IdeConfigurationManager *self,$/;"	f	file:
+ide_configuration_manager_class_init	ide-configuration-manager.c	/^ide_configuration_manager_class_init (IdeConfigurationManagerClass *klass)$/;"	f	file:
+ide_configuration_manager_collect_providers	ide-configuration-manager.c	/^ide_configuration_manager_collect_providers (PeasExtensionSet *set,$/;"	f	file:
+ide_configuration_manager_extension_added	ide-configuration-manager.c	/^ide_configuration_manager_extension_added (PeasExtensionSet *set,$/;"	f	file:
+ide_configuration_manager_extension_removed	ide-configuration-manager.c	/^ide_configuration_manager_extension_removed (PeasExtensionSet *set,$/;"	f	file:
+ide_configuration_manager_finalize	ide-configuration-manager.c	/^ide_configuration_manager_finalize (GObject *object)$/;"	f	file:
+ide_configuration_manager_get_configuration	ide-configuration-manager.c	/^ide_configuration_manager_get_configuration (IdeConfigurationManager *self,$/;"	f
+ide_configuration_manager_get_current	ide-configuration-manager.c	/^ide_configuration_manager_get_current (IdeConfigurationManager *self)$/;"	f
+ide_configuration_manager_get_item	ide-configuration-manager.c	/^ide_configuration_manager_get_item (GListModel *model,$/;"	f	file:
+ide_configuration_manager_get_item_type	ide-configuration-manager.c	/^ide_configuration_manager_get_item_type (GListModel *model)$/;"	f	file:
+ide_configuration_manager_get_n_items	ide-configuration-manager.c	/^ide_configuration_manager_get_n_items (GListModel *model)$/;"	f	file:
+ide_configuration_manager_get_property	ide-configuration-manager.c	/^ide_configuration_manager_get_property (GObject    *object,$/;"	f	file:
+ide_configuration_manager_init	ide-configuration-manager.c	/^ide_configuration_manager_init (IdeConfigurationManager *self)$/;"	f	file:
+ide_configuration_manager_init_async	ide-configuration-manager.c	/^ide_configuration_manager_init_async (GAsyncInitable      *initable,$/;"	f	file:
+ide_configuration_manager_init_finish	ide-configuration-manager.c	/^ide_configuration_manager_init_finish (GAsyncInitable  *initable,$/;"	f	file:
+ide_configuration_manager_init_worker	ide-configuration-manager.c	/^ide_configuration_manager_init_worker (GTask        *task,$/;"	f	file:
+ide_configuration_manager_notify_display_name	ide-configuration-manager.c	/^ide_configuration_manager_notify_display_name (IdeConfigurationManager *self,$/;"	f	file:
+ide_configuration_manager_remove	ide-configuration-manager.c	/^ide_configuration_manager_remove (IdeConfigurationManager *self,$/;"	f
+ide_configuration_manager_save_async	ide-configuration-manager.c	/^ide_configuration_manager_save_async (IdeConfigurationManager *self,$/;"	f
+ide_configuration_manager_save_cb	ide-configuration-manager.c	/^ide_configuration_manager_save_cb (GObject      *object,$/;"	f	file:
+ide_configuration_manager_save_finish	ide-configuration-manager.c	/^ide_configuration_manager_save_finish (IdeConfigurationManager  *self,$/;"	f
+ide_configuration_manager_save_tick	ide-configuration-manager.c	/^ide_configuration_manager_save_tick (GTask *task)$/;"	f	file:
+ide_configuration_manager_set_current	ide-configuration-manager.c	/^ide_configuration_manager_set_current (IdeConfigurationManager *self,$/;"	f
+ide_configuration_manager_set_property	ide-configuration-manager.c	/^ide_configuration_manager_set_property (GObject      *object,$/;"	f	file:
+ide_configuration_new	ide-configuration.c	/^ide_configuration_new (IdeContext  *context,$/;"	f
+ide_configuration_provider_default_init	ide-configuration-provider.c	/^ide_configuration_provider_default_init (IdeConfigurationProviderInterface *iface)$/;"	f	file:
+ide_configuration_provider_load	ide-configuration-provider.c	/^ide_configuration_provider_load (IdeConfigurationProvider *self,$/;"	f
+ide_configuration_provider_real_load	ide-configuration-provider.c	/^ide_configuration_provider_real_load (IdeConfigurationProvider *self,$/;"	f	file:
+ide_configuration_provider_real_save_async	ide-configuration-provider.c	/^ide_configuration_provider_real_save_async (IdeConfigurationProvider *self,$/;"	f
+ide_configuration_provider_real_save_finish	ide-configuration-provider.c	/^ide_configuration_provider_real_save_finish (IdeConfigurationProvider  *self,$/;"	f
+ide_configuration_provider_real_unload	ide-configuration-provider.c	/^ide_configuration_provider_real_unload (IdeConfigurationProvider *self,$/;"	f	file:
+ide_configuration_provider_save_async	ide-configuration-provider.c	/^ide_configuration_provider_save_async (IdeConfigurationProvider *self,$/;"	f
+ide_configuration_provider_save_finish	ide-configuration-provider.c	/^ide_configuration_provider_save_finish (IdeConfigurationProvider  *self,$/;"	f
+ide_configuration_provider_unload	ide-configuration-provider.c	/^ide_configuration_provider_unload (IdeConfigurationProvider *self,$/;"	f
+ide_configuration_real_get_device	ide-configuration.c	/^ide_configuration_real_get_device (IdeConfiguration *self)$/;"	f	file:
+ide_configuration_real_get_runtime	ide-configuration.c	/^ide_configuration_real_get_runtime (IdeConfiguration *self)$/;"	f	file:
+ide_configuration_real_set_device	ide-configuration.c	/^ide_configuration_real_set_device (IdeConfiguration *self,$/;"	f	file:
+ide_configuration_real_set_runtime	ide-configuration.c	/^ide_configuration_real_set_runtime (IdeConfiguration *self,$/;"	f	file:
+ide_configuration_reset_internal_value	ide-configuration.c	/^ide_configuration_reset_internal_value (IdeConfiguration *self,$/;"	f	file:
+ide_configuration_runtime_manager_items_changed	ide-configuration.c	/^ide_configuration_runtime_manager_items_changed (IdeConfiguration  *self,$/;"	f	file:
+ide_configuration_set_app_id	ide-configuration.c	/^ide_configuration_set_app_id (IdeConfiguration *self,$/;"	f
+ide_configuration_set_config_opts	ide-configuration.c	/^ide_configuration_set_config_opts (IdeConfiguration *self,$/;"	f
+ide_configuration_set_debug	ide-configuration.c	/^ide_configuration_set_debug (IdeConfiguration *self,$/;"	f
+ide_configuration_set_device	ide-configuration.c	/^ide_configuration_set_device (IdeConfiguration *self,$/;"	f
+ide_configuration_set_device_id	ide-configuration.c	/^ide_configuration_set_device_id (IdeConfiguration *self,$/;"	f
+ide_configuration_set_dirty	ide-configuration.c	/^ide_configuration_set_dirty (IdeConfiguration *self,$/;"	f
+ide_configuration_set_display_name	ide-configuration.c	/^ide_configuration_set_display_name (IdeConfiguration *self,$/;"	f
+ide_configuration_set_environment	ide-configuration.c	/^ide_configuration_set_environment (IdeConfiguration *self,$/;"	f
+ide_configuration_set_id	ide-configuration.c	/^ide_configuration_set_id (IdeConfiguration *self,$/;"	f	file:
+ide_configuration_set_internal_boolean	ide-configuration.c	/^ide_configuration_set_internal_boolean (IdeConfiguration  *self,$/;"	f
+ide_configuration_set_internal_int	ide-configuration.c	/^ide_configuration_set_internal_int (IdeConfiguration *self,$/;"	f
+ide_configuration_set_internal_int64	ide-configuration.c	/^ide_configuration_set_internal_int64 (IdeConfiguration *self,$/;"	f
+ide_configuration_set_internal_object	ide-configuration.c	/^ide_configuration_set_internal_object (IdeConfiguration *self,$/;"	f
+ide_configuration_set_internal_string	ide-configuration.c	/^ide_configuration_set_internal_string (IdeConfiguration *self,$/;"	f
+ide_configuration_set_internal_strv	ide-configuration.c	/^ide_configuration_set_internal_strv (IdeConfiguration    *self,$/;"	f
+ide_configuration_set_parallelism	ide-configuration.c	/^ide_configuration_set_parallelism (IdeConfiguration *self,$/;"	f
+ide_configuration_set_prefix	ide-configuration.c	/^ide_configuration_set_prefix (IdeConfiguration *self,$/;"	f
+ide_configuration_set_property	ide-configuration.c	/^ide_configuration_set_property (GObject      *object,$/;"	f	file:
+ide_configuration_set_runtime	ide-configuration.c	/^ide_configuration_set_runtime (IdeConfiguration *self,$/;"	f
+ide_configuration_set_runtime_id	ide-configuration.c	/^ide_configuration_set_runtime_id (IdeConfiguration *self,$/;"	f
+ide_configuration_setenv	ide-configuration.c	/^ide_configuration_setenv (IdeConfiguration *self,$/;"	f
+ide_configuration_snapshot	ide-configuration.c	/^ide_configuration_snapshot (IdeConfiguration *self)$/;"	f
+ide_configuration_supports_device	ide-configuration.c	/^ide_configuration_supports_device (IdeConfiguration *self,$/;"	f
+ide_configuration_supports_runtime	ide-configuration.c	/^ide_configuration_supports_runtime (IdeConfiguration *self,$/;"	f
+ide_environment_append	ide-environment.c	/^ide_environment_append (IdeEnvironment         *self,$/;"	f
+ide_environment_class_init	ide-environment.c	/^ide_environment_class_init (IdeEnvironmentClass *klass)$/;"	f	file:
+ide_environment_copy	ide-environment.c	/^ide_environment_copy (IdeEnvironment *self)$/;"	f
+ide_environment_finalize	ide-environment.c	/^ide_environment_finalize (GObject *object)$/;"	f	file:
+ide_environment_get_environ	ide-environment.c	/^ide_environment_get_environ (IdeEnvironment *self)$/;"	f
+ide_environment_get_item	ide-environment.c	/^ide_environment_get_item (GListModel *model,$/;"	f	file:
+ide_environment_get_item_type	ide-environment.c	/^ide_environment_get_item_type (GListModel *model)$/;"	f	file:
+ide_environment_get_n_items	ide-environment.c	/^ide_environment_get_n_items (GListModel *model)$/;"	f	file:
+ide_environment_getenv	ide-environment.c	/^ide_environment_getenv (IdeEnvironment *self,$/;"	f
+ide_environment_init	ide-environment.c	/^ide_environment_init (IdeEnvironment *self)$/;"	f	file:
+ide_environment_items_changed	ide-environment.c	/^ide_environment_items_changed (IdeEnvironment *self)$/;"	f	file:
+ide_environment_new	ide-environment.c	/^ide_environment_new (void)$/;"	f
+ide_environment_remove	ide-environment.c	/^ide_environment_remove (IdeEnvironment         *self,$/;"	f
+ide_environment_setenv	ide-environment.c	/^ide_environment_setenv (IdeEnvironment *self,$/;"	f
+ide_environment_variable_class_init	ide-environment-variable.c	/^ide_environment_variable_class_init (IdeEnvironmentVariableClass *klass)$/;"	f	file:
+ide_environment_variable_finalize	ide-environment-variable.c	/^ide_environment_variable_finalize (GObject *object)$/;"	f	file:
+ide_environment_variable_get_key	ide-environment-variable.c	/^ide_environment_variable_get_key (IdeEnvironmentVariable *self)$/;"	f
+ide_environment_variable_get_property	ide-environment-variable.c	/^ide_environment_variable_get_property (GObject    *object,$/;"	f	file:
+ide_environment_variable_get_value	ide-environment-variable.c	/^ide_environment_variable_get_value (IdeEnvironmentVariable *self)$/;"	f
+ide_environment_variable_init	ide-environment-variable.c	/^ide_environment_variable_init (IdeEnvironmentVariable *self)$/;"	f	file:
+ide_environment_variable_new	ide-environment-variable.c	/^ide_environment_variable_new (const gchar *key,$/;"	f
+ide_environment_variable_notify	ide-environment.c	/^ide_environment_variable_notify (IdeEnvironment         *self,$/;"	f	file:
+ide_environment_variable_set_key	ide-environment-variable.c	/^ide_environment_variable_set_key (IdeEnvironmentVariable *self,$/;"	f
+ide_environment_variable_set_property	ide-environment-variable.c	/^ide_environment_variable_set_property (GObject      *object,$/;"	f	file:
+ide_environment_variable_set_value	ide-environment-variable.c	/^ide_environment_variable_set_value (IdeEnvironmentVariable *self,$/;"	f
+ignore_exit_status	ide-build-stage-launcher.c	/^  guint                  ignore_exit_status : 1;$/;"	m	struct:__anon8	file:
+in_clean	ide-build-pipeline.c	/^  guint in_clean : 1;$/;"	m	struct:_IdeBuildPipeline	file:
+initable_iface_init	ide-build-manager.c	/^initable_iface_init (GInitableIface *iface)$/;"	f	file:
+initable_iface_init	ide-build-pipeline.c	/^initable_iface_init (GInitableIface *iface)$/;"	f	file:
+initable_init	ide-build-manager.c	/^initable_init (GInitable     *initable,$/;"	f	file:
+internal	ide-configuration.c	/^  GHashTable     *internal;$/;"	m	struct:__anon4	file:
+is_snapshot	ide-configuration.c	/^  guint           is_snapshot : 1;$/;"	m	struct:__anon4	file:
+key	ide-environment-variable.c	/^  gchar   *key;$/;"	m	struct:_IdeEnvironmentVariable	file:
+last_build_time	ide-build-manager.c	/^  GDateTime        *last_build_time;$/;"	m	struct:_IdeBuildManager	file:
+launcher	ide-build-stage-launcher.c	/^  IdeSubprocessLauncher *launcher;$/;"	m	struct:__anon8	file:
+list_model_iface_init	ide-configuration-manager.c	/^list_model_iface_init (GListModelInterface *iface)$/;"	f	file:
+list_model_iface_init	ide-environment.c	/^list_model_iface_init (GListModelInterface *iface)$/;"	f	file:
+load	ide-build-pipeline-addin.h	/^  void (*load)   (IdeBuildPipelineAddin *self,$/;"	m	struct:_IdeBuildPipelineAddinInterface
+load	ide-configuration-provider.h	/^  void     (*load)        (IdeConfigurationProvider  *self,$/;"	m	struct:_IdeConfigurationProviderInterface
+log	ide-build-pipeline.c	/^  IdeBuildLog *log;$/;"	m	struct:_IdeBuildPipeline	file:
+log_queue	ide-build-log.c	/^  GAsyncQueue *log_queue;$/;"	m	struct:_IdeBuildLog	file:
+log_source	ide-build-log.c	/^  GSource     *log_source;$/;"	m	struct:_IdeBuildLog	file:
+mode	ide-build-stage-mkdirs.c	/^  gint      mode;$/;"	m	struct:__anon21	file:
+n_pause	ide-build-stage.c	/^  gint                 n_pause;$/;"	m	struct:__anon24	file:
+name	ide-build-stage.c	/^  gchar               *name;$/;"	m	struct:__anon24	file:
+observer	ide-build-stage.c	/^  IdeBuildLogObserver  observer;$/;"	m	struct:__anon24	file:
+observer_data	ide-build-stage.c	/^  gpointer             observer_data;$/;"	m	struct:__anon24	file:
+observer_data_destroy	ide-build-stage.c	/^  GDestroyNotify       observer_data_destroy;$/;"	m	struct:__anon24	file:
+observers	ide-build-log.c	/^  GArray      *observers;$/;"	m	struct:_IdeBuildLog	file:
+parallelism	ide-configuration.c	/^  gint            parallelism;$/;"	m	struct:__anon4	file:
+parent	ide-configuration-provider.h	/^  GTypeInterface parent;$/;"	m	struct:_IdeConfigurationProviderInterface
+parent	ide-configuration.h	/^  IdeObjectClass parent;$/;"	m	struct:_IdeConfigurationClass
+parent_class	ide-build-stage-launcher.h	/^  IdeBuildStageClass parent_class;$/;"	m	struct:_IdeBuildStageLauncherClass
+parent_class	ide-build-stage-mkdirs.h	/^  IdeBuildStageClass parent_class;$/;"	m	struct:_IdeBuildStageMkdirsClass
+parent_class	ide-build-stage.h	/^  IdeObjectClass parent_class;$/;"	m	struct:_IdeBuildStageClass
+parent_iface	ide-build-system-discovery.h	/^  GTypeInterface parent_iface;$/;"	m	struct:_IdeBuildSystemDiscoveryInterface
+parent_iface	ide-build-system.h	/^  GTypeInterface parent_iface;$/;"	m	struct:_IdeBuildSystemInterface
+parent_iface	ide-build-target.h	/^  GTypeInterface parent_iface;$/;"	m	struct:_IdeBuildTargetInterface
+parent_instance	ide-build-log.c	/^  GObject      parent_instance;$/;"	m	struct:_IdeBuildLog	file:
+parent_instance	ide-build-manager.c	/^  IdeObject         parent_instance;$/;"	m	struct:_IdeBuildManager	file:
+parent_instance	ide-build-pipeline.c	/^  IdeObject         parent_instance;$/;"	m	struct:_IdeBuildPipeline	file:
+parent_instance	ide-configuration-manager.c	/^  GObject           parent_instance;$/;"	m	struct:_IdeConfigurationManager	file:
+parent_instance	ide-environment-variable.c	/^  GObject  parent_instance;$/;"	m	struct:_IdeEnvironmentVariable	file:
+parent_instance	ide-environment.c	/^  GObject    parent_instance;$/;"	m	struct:_IdeEnvironment	file:
+parent_instnace	ide-build-stage-transfer.c	/^  IdeBuildStage  parent_instnace;$/;"	m	struct:_IdeBuildStageTransfer	file:
+parse_severity	ide-build-pipeline.c	/^parse_severity (const gchar *str)$/;"	f	file:
+path	ide-build-stage-mkdirs.c	/^  gchar    *path;$/;"	m	struct:__anon21	file:
+paths	ide-build-stage-mkdirs.c	/^  GArray *paths;$/;"	m	struct:__anon22	file:
+phase	ide-build-pipeline.c	/^  IdeBuildPhase  phase;$/;"	m	struct:__anon13	file:
+phase	ide-build-pipeline.c	/^  IdeBuildPhase phase;$/;"	m	struct:__anon16	file:
+pipeline	ide-build-manager.c	/^  IdeBuildPipeline *pipeline;$/;"	m	struct:_IdeBuildManager	file:
+pipeline	ide-build-pipeline.c	/^  GArray *pipeline;$/;"	m	struct:_IdeBuildPipeline	file:
+pipeline_entry_compare	ide-build-pipeline.c	/^pipeline_entry_compare (gconstpointer a,$/;"	f	file:
+pipeline_signals	ide-build-manager.c	/^  EggSignalGroup   *pipeline_signals;$/;"	m	struct:_IdeBuildManager	file:
+position	ide-build-pipeline.c	/^  gint position;$/;"	m	struct:_IdeBuildPipeline	file:
+prefix	ide-configuration.c	/^  gchar          *prefix;$/;"	m	struct:__anon4	file:
+priority	ide-build-pipeline.c	/^  gint           priority;$/;"	m	struct:__anon13	file:
+propagate_dirty_bit	ide-configuration.c	/^propagate_dirty_bit (gpointer user_data)$/;"	f	file:
+properties	ide-build-manager.c	/^static GParamSpec *properties [N_PROPS];$/;"	v	file:
+properties	ide-build-pipeline.c	/^static GParamSpec *properties [N_PROPS];$/;"	v	file:
+properties	ide-build-stage-launcher.c	/^static GParamSpec *properties [N_PROPS];$/;"	v	file:
+properties	ide-build-stage-transfer.c	/^static GParamSpec *properties [N_PROPS];$/;"	v	file:
+properties	ide-build-stage.c	/^static GParamSpec *properties [N_PROPS];$/;"	v	file:
+properties	ide-build-system.c	/^static GParamSpec *properties [N_PROPS];$/;"	v	file:
+properties	ide-configuration-manager.c	/^static GParamSpec *properties [LAST_PROP];$/;"	v	file:
+properties	ide-configuration.c	/^static GParamSpec *properties [N_PROPS];$/;"	v	file:
+properties	ide-environment-variable.c	/^static GParamSpec *properties [LAST_PROP];$/;"	v	file:
+query	ide-build-stage.h	/^  void     (*query)          (IdeBuildStage        *self,$/;"	m	struct:_IdeBuildStageClass
+queued_execute	ide-build-stage.c	/^  GTask               *queued_execute;$/;"	m	struct:__anon24	file:
+reap	ide-build-stage.h	/^  void     (*reap)           (IdeBuildStage        *self,$/;"	m	struct:_IdeBuildStageClass
+regex	ide-build-pipeline.c	/^  GRegex *regex;$/;"	m	struct:__anon14	file:
+requested_mask	ide-build-pipeline.c	/^  IdeBuildPhase requested_mask;$/;"	m	struct:_IdeBuildPipeline	file:
+running_time	ide-build-manager.c	/^  GTimer           *running_time;$/;"	m	struct:_IdeBuildManager	file:
+runtime_id	ide-configuration.c	/^  gchar          *runtime_id;$/;"	m	struct:__anon4	file:
+runtime_ready	ide-configuration.c	/^  guint           runtime_ready : 1;$/;"	m	struct:__anon4	file:
+save_async	ide-configuration-provider.h	/^  void     (*save_async)  (IdeConfigurationProvider  *self,$/;"	m	struct:_IdeConfigurationProviderInterface
+save_finish	ide-configuration-provider.h	/^  gboolean (*save_finish) (IdeConfigurationProvider  *self,$/;"	m	struct:_IdeConfigurationProviderInterface
+self	ide-build-stage.c	/^  IdeBuildStage     *self;$/;"	m	struct:__anon26	file:
+seqnum	ide-build-pipeline.c	/^  guint seqnum;$/;"	m	struct:_IdeBuildPipeline	file:
+sequence	ide-build-log.c	/^  guint        sequence;$/;"	m	struct:_IdeBuildLog	file:
+sequence	ide-configuration.c	/^  guint           sequence;$/;"	m	struct:__anon4	file:
+set_device	ide-configuration.h	/^  void        (*set_device)       (IdeConfiguration *self,$/;"	m	struct:_IdeConfigurationClass
+set_runtime	ide-configuration.h	/^  void        (*set_runtime)      (IdeConfiguration *self,$/;"	m	struct:_IdeConfigurationClass
+signals	ide-build-manager.c	/^static guint signals [N_SIGNALS];$/;"	v	file:
+signals	ide-build-pipeline.c	/^static guint signals [N_SIGNALS];$/;"	v	file:
+signals	ide-build-stage.c	/^static guint signals [N_SIGNALS];$/;"	v	file:
+signals	ide-configuration-manager.c	/^static guint signals [N_SIGNALS];$/;"	v	file:
+signals	ide-configuration.c	/^static guint signals [LAST_SIGNAL];$/;"	v	file:
+signals	ide-environment.c	/^static guint signals [LAST_SIGNAL];$/;"	v	file:
+skip_color_codes_values	ide-build-utils.c	/^skip_color_codes_values (const gchar **cursor)$/;"	f	file:
+sort_priority	ide-build-system.c	/^sort_priority (gconstpointer a,$/;"	f	file:
+srcdir	ide-build-pipeline.c	/^  gchar *srcdir;$/;"	m	struct:_IdeBuildPipeline	file:
+stage	ide-build-pipeline.c	/^  IdeBuildStage *stage;$/;"	m	struct:__anon13	file:
+stages	ide-build-pipeline.c	/^      GPtrArray *stages;$/;"	m	struct:__anon16::__anon17::__anon18	file:
+stdout_path	ide-build-stage.c	/^  gchar               *stdout_path;$/;"	m	struct:__anon24	file:
+stdout_stream	ide-build-stage.c	/^  GOutputStream       *stdout_stream;$/;"	m	struct:__anon24	file:
+stream	ide-build-stage.c	/^  GOutputStream     *stream;$/;"	m	struct:__anon26	file:
+stream_type	ide-build-stage.c	/^  IdeBuildLogStream  stream_type;$/;"	m	struct:__anon26	file:
+supports_device	ide-configuration.h	/^  gboolean    (*supports_device)  (IdeConfiguration *self,$/;"	m	struct:_IdeConfigurationClass
+supports_runtime	ide-configuration.h	/^  gboolean    (*supports_runtime) (IdeConfiguration *self,$/;"	m	struct:_IdeConfigurationClass
+tail_free	ide-build-stage.c	/^tail_free (Tail *tail)$/;"	f	file:
+tail_new	ide-build-stage.c	/^tail_new (IdeBuildStage     *self,$/;"	f	file:
+task	ide-build-pipeline.c	/^  GTask *task;$/;"	m	struct:__anon16	file:
+task_data_free	ide-build-pipeline.c	/^task_data_free (gpointer data)$/;"	f	file:
+task_data_new	ide-build-pipeline.c	/^task_data_new (GTask    *task,$/;"	f	file:
+task_queue	ide-build-pipeline.c	/^  GQueue task_queue;$/;"	m	struct:_IdeBuildPipeline	file:
+task_type_names	ide-build-pipeline.c	/^static const gchar *task_type_names[] = {$/;"	v	file:
+timer_callback	ide-build-manager.c	/^timer_callback (gpointer data)$/;"	f	file:
+timer_source	ide-build-manager.c	/^  guint             timer_source;$/;"	m	struct:_IdeBuildManager	file:
+transfer	ide-build-stage-transfer.c	/^  IdeTransfer   *transfer;$/;"	m	struct:_IdeBuildStageTransfer	file:
+transient	ide-build-stage.c	/^  guint                transient : 1;$/;"	m	struct:__anon24	file:
+type	ide-build-pipeline.c	/^  TaskType type;$/;"	m	struct:__anon16	file:
+type_interface	ide-build-pipeline-addin.h	/^  GTypeInterface type_interface;$/;"	m	struct:_IdeBuildPipelineAddinInterface
+unload	ide-build-pipeline-addin.h	/^  void (*unload) (IdeBuildPipelineAddin *self,$/;"	m	struct:_IdeBuildPipelineAddinInterface
+unload	ide-configuration-provider.h	/^  void     (*unload)      (IdeConfigurationProvider  *self,$/;"	m	struct:_IdeConfigurationProviderInterface
+value	ide-environment-variable.c	/^  gchar   *value;$/;"	m	struct:_IdeEnvironmentVariable	file:
+variables	ide-environment.c	/^  GPtrArray *variables;$/;"	m	struct:_IdeEnvironment	file:
+with_parents	ide-build-stage-mkdirs.c	/^  gboolean  with_parents;$/;"	m	struct:__anon21	file:
