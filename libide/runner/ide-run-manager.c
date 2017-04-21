@@ -1056,8 +1056,8 @@ ide_run_manager_init (IdeRunManager *self)
 
   run_action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "run");
   run_with_action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "run-with-handler");
-  g_object_bind_property (build_manager, "can-build", run_action, "enabled" 0);
-  g_object_bind_property (build_manager, "can-build", run_with_action, "enabled" 0);
+  g_object_bind_property (build_manager, "can-build", run_action, "enabled", 0);
+  g_object_bind_property (build_manager, "can-build", run_with_action, "enabled", 0);
 
   ide_run_manager_add_handler (self,
                                "run",
