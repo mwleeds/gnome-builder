@@ -550,20 +550,25 @@ ide_buildconfig_configuration_provider_load_cb (GObject      *object,
 }
 
 static void
-ide_buildconfig_configuration_provider_load (IdeConfigurationProvider *provider,
-                                             IdeConfigurationManager  *manager)
+ide_buildconfig_configuration_provider_load_async (IdeConfigurationProvider *provider,
+                                                   GCancellable             *cancellable,
+                                                   GAsyncReadyCallback       callback,
+                                                   gpointer                  user_data)
 {
   IdeBuildconfigConfigurationProvider *self = (IdeBuildconfigConfigurationProvider *)provider;
+  IdeConfigurationManager *manager = (IdeConfigurationManager *)user_data;
   g_autoptr(GTask) task = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_BUILDCONFIG_CONFIGURATION_PROVIDER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (IDE_IS_CONFIGURATION_MANAGER (manager));
 
-  ide_set_weak_pointer (&self->manager, manager);
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_buildconfig_configuration_provider_load_async);
 
-  self->cancellable = g_cancellable_new ();
+  ide_set_weak_pointer (&self->manager, manager);
 
   task = g_task_new (self, self->cancellable, ide_buildconfig_configuration_provider_load_cb, NULL);
   g_task_set_source_tag (task, ide_buildconfig_configuration_provider_load);

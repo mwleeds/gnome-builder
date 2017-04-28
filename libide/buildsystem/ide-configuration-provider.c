@@ -22,9 +22,30 @@
 G_DEFINE_INTERFACE (IdeConfigurationProvider, ide_configuration_provider, G_TYPE_OBJECT)
 
 static void
-ide_configuration_provider_real_load (IdeConfigurationProvider *self,
-                                      IdeConfigurationManager  *manager)
+ide_configuration_provider_real_load_async (IdeConfigurationProvider *self,
+                                            GCancellable             *cancellable,
+                                            GAsyncReadyCallback       callback,
+                                            gpointer                  user_data)
 {
+  g_autoptr(GTask) task = user_data;
+
+  g_return_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_return_if_fail (G_IS_TASK (task));
+
+  g_warning ("The current IdeConfigurationProvider doesn't implement load_async");
+  g_task_return_boolean (task, TRUE);
+}
+
+gboolean
+ide_configuration_provider_real_load_finish (IdeConfigurationProvider  *self,
+                                             GAsyncResult              *result,
+                                             GError                   **error)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  return TRUE;
 }
 
 static void
@@ -70,13 +91,26 @@ ide_configuration_provider_default_init (IdeConfigurationProviderInterface *ifac
 }
 
 void
-ide_configuration_provider_load (IdeConfigurationProvider *self,
-                                 IdeConfigurationManager  *manager)
+ide_configuration_provider_load_async (IdeConfigurationProvider *self,
+                                       GCancellable             *cancellable,
+                                       GAsyncReadyCallback       callback,
+                                       gpointer                  user_data)
 {
   g_return_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self));
-  g_return_if_fail (IDE_IS_CONFIGURATION_MANAGER (manager));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_CONFIGURATION_PROVIDER_GET_IFACE (self)->load (self, manager);
+  IDE_CONFIGURATION_PROVIDER_GET_IFACE (self)->load_async (self, cancellable, callback, user_data);
+}
+
+gboolean
+ide_configuration_provider_load_finish (IdeConfigurationProvider  *self,
+                                        GAsyncResult              *result,
+                                        GError                   **error)
+{
+  g_return_val_if_fail (IDE_IS_CONFIGURATION_PROVIDER (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
+
+  return IDE_CONFIGURATION_PROVIDER_GET_IFACE (self)->load_finish (self, result, error);
 }
 
 void
